@@ -1,11 +1,13 @@
 import Nivel1 from "./src/scenes/Nivel1.js";
+import NivelSuperado from "./src/scenes/NivelSuperado.js";
+import Precarga from "./src/scenes/Precarga.js";
 
 
 // Create a new Phaser config object
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 2666,
+  height: 2000,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -28,7 +30,7 @@ const config = {
   // List of scenes to load
   // Only the first scene will be shown
   // Remember to import the scene before adding it to the list
-  scene: [Nivel1],
+  scene: [Precarga ,Nivel1,],
 };
 
 // Create a new Phaser game instance
