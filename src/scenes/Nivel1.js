@@ -14,6 +14,9 @@ export default class Nivel1 extends Phaser.Scene {
     this.puntajeFinal = 0;
     this.temporizador = 90;
     this.vidas = 3;
+
+    this.juegoSuperado = false;
+    this.juegoPerdido = false;
   }
 
   preload() {}
@@ -97,6 +100,7 @@ export default class Nivel1 extends Phaser.Scene {
       }
     });
 
+
     //grupo de enemigos
     this.enemigo = this.physics.add.group();
 
@@ -117,20 +121,14 @@ export default class Nivel1 extends Phaser.Scene {
     this.physics.add.collider(this.cactus, plataformaLayer);
     this.physics.add.collider(this.enemigo, plataformaLayer);
 
-    this.physics.add.collider(this.enemigo, this.cactus );
+    this.physics.add.collider(this.enemigo, this.cactus);
 
-    this.physics.add.collider(
-      this.jugador,
-      this.enemigo,
-      this.colisionObjetos,
-      null,
-      this
-    );
+    this.physics.add.collider(this.jugador, this.enemigo);
 
     this.physics.add.collider(
       this.jugador,
       this.cactus,
-      this.colisionObjetos,
+      this.colisionCactus,
       null,
       this
     );
@@ -192,7 +190,8 @@ export default class Nivel1 extends Phaser.Scene {
     const stopButton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     stopButton
       .on("pointerup", () => {
-        this.scene.start("pausa");
+        this.scene.pause("nivel1")
+        this.scene.launch("pausa");
       })
       .setScrollFactor(0);
 
@@ -212,11 +211,20 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   update() {
+    //inicia escena de juego superado
+    if (this.juegoSuperado) {
+      this.scene.start("juegoSuperado");
+    }
+
+    //inicia escena de juego perdido
+    if (this.juegoPerdido) {
+      this.scene.start("juegoPerdido");
+    }
+
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-600);
       this.jugador.anims.play("left", true);
     }
-
 
     //move right
     else if (this.cursors.right.isDown) {
@@ -224,21 +232,28 @@ export default class Nivel1 extends Phaser.Scene {
       this.jugador.anims.play("right", true);
     }
 
-
     //stop
     else {
       this.jugador.setVelocityX(0);
       this.jugador.anims.play("turn");
     }
 
-
     //jump
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-1000);
-      this.jugador.anims.play("jump");
-    }
-  }
 
+    }
+
+    if(this.jugador.body)
+    //condicion perder si timer llega a 0
+    if (this.temporizador <= 0) {
+      this.juegoPerdido = true;
+    }
+    
+   
+     
+
+  }
 
   recolectarHarina(jugador, harina) {
     harina.disableBody(true, true);
@@ -249,7 +264,6 @@ export default class Nivel1 extends Phaser.Scene {
     this.cantidadHarinaTexto.setText("H: " + this.cantidadHarina);
   }
 
-
   recolectarMaiz(jugador, maiz) {
     maiz.disableBody(true, true);
 
@@ -259,19 +273,15 @@ export default class Nivel1 extends Phaser.Scene {
     this.cantidadMaizTexto.setText("H: " + this.cantidadMaiz);
   }
 
-
-  colisionObjetos(jugador, cactus) {
+  colisionCactus(jugador, cactus) {
     cactus.disableBody(false, false);
     this.vidas = this.vidas - 1;
     console.log(this.vidas);
   }
-
-  
 
   temporizadorDescendente() {
     this.temporizador = this.temporizador - 1;
     this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
     //console.log(this.temporizador);
   }
-
 }

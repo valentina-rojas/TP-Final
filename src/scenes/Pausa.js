@@ -13,11 +13,14 @@ export default class Pausa extends Phaser.Scene {
       this.add.image(400, 1000, "tilesFondo");
   
       //botón para volver al menu
-      const Button = this.add.image(1350, 1000, "volver").setInteractive();
+      const botonVolver = this.add.image(1350, 1000, "volver").setInteractive();
   
-      Button.on("pointerup", () => {
-        this.scene.start("menu");
+      botonVolver.on("pointerup", () => {
+        this.scene.start("nivel1");
       });
+
+   
+      
     }
   
     update() {}

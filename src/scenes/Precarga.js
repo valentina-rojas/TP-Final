@@ -24,6 +24,7 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("ayuda", "./public/assets/images/ayuda.png");
     this.load.image("volver", "./public/assets/images/volver.png");
     this.load.image("ajustes", "./public/assets/images/ajustes.png");
+    this.load.image("reanudar", "./public/assets/images/reanudar.png");
 
     this.load.spritesheet("enemigo", "./public/assets/images/enemigo.png", {
       frameWidth: 200,
@@ -65,7 +66,7 @@ export default class Precarga extends Phaser.Scene {
 
     this.anims.create({
       key: "jump",
-      frames: [{ key: "personaje", frame: 11 }],
+      frames: [{ key: "personaje", frame: 10 }],
       frameRate: 10,
     });
 
