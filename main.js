@@ -1,5 +1,8 @@
+import Ayuda from "./src/scenes/Ayuda.js";
+import Menu from "./src/scenes/Menu.js";
 import Nivel1 from "./src/scenes/Nivel1.js";
 import NivelSuperado from "./src/scenes/NivelSuperado.js";
+import Pausa from "./src/scenes/Pausa.js";
 import Precarga from "./src/scenes/Precarga.js";
 
 
@@ -23,14 +26,14 @@ const config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 },
+      gravity: { y: 600 },
       debug: true,
     },
   },
   // List of scenes to load
   // Only the first scene will be shown
   // Remember to import the scene before adding it to the list
-  scene: [Precarga ,Nivel1,],
+  scene: [Precarga ,Menu, Nivel1, Ayuda, Pausa],
 };
 
 // Create a new Phaser game instance

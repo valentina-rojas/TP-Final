@@ -10,6 +10,9 @@ export default class Nivel1 extends Phaser.Scene {
   init() {
     this.cantidadHarina = 0;
     this.cantidadMaiz = 0;
+    this.puntajeRecolectables = 0;
+    this.puntajeFinal = 0;
+    this.temporizador = 60;
   }
 
   preload() {}
@@ -43,7 +46,7 @@ export default class Nivel1 extends Phaser.Scene {
     console.log(spawnPoint);
 
     // The player and its settings
-    this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
+    this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "personaje");
 
     this.physics.add.collider(this.jugador, plataformaLayer);
     this.jugador.setBounce(0.1);
@@ -81,14 +84,11 @@ export default class Nivel1 extends Phaser.Scene {
       }
     });
 
-    spawnPoint = map.findObject("objetos", (obj) => obj.name === "cactus");
-
-    this.cactus = this.add.image(spawnPoint.x, spawnPoint.y, "cactus");
 
     //colision entre harina y plataformas
     this.physics.add.collider(this.harina, plataformaLayer);
     this.physics.add.collider(this.maiz, plataformaLayer);
-    this.physics.add.collider(this.cactus, plataformaLayer);
+    
 
     //colision entre jugador y harina
     this.physics.add.collider(
@@ -108,15 +108,45 @@ export default class Nivel1 extends Phaser.Scene {
       this
     );
 
+    //temporizador
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.temporizadorDescendente,
+      callbackScope: this,
+      loop: true,
+    });
+
+    //texto que muestre el temporizador
+    this.temporizadorTexto = this.add.text(
+      15,
+      150,
+      "Tiempo: " + this.temporizador,
+      {
+        fontSize: "80px",
+        fill: "#ffffff",
+        fontFamily: "arial",
+        fontWeight: "bold",
+      }
+    );
+
     this.cantidadHarinaTexto = this.add.text(15, 15, "H: 0", {
-      fontSize: "50px",
+      fontSize: "80px",
       fill: "#FFFFFF",
     });
 
-    this.cantidadMaizTexto = this.add.text(15, 55, "M: 0", {
-      fontSize: "50px",
+
+    
+    this.cantidadMaizTexto = this.add.text(15, 70, "M: 0", {
+      fontSize: "80px",
       fill: "#FFFFFF",
     });
+
+
+     //Botón para la escena de pausa
+     const stopButton = this.add.sprite(2500, 100, "ajustes").setInteractive();
+     stopButton.on("pointerup", () => {
+       this.scene.start("pausa");
+     });
 
     //camara
     this.cameras.main.startFollow(this.jugador);
@@ -132,16 +162,18 @@ export default class Nivel1 extends Phaser.Scene {
 
     //fijar texto para que no se mueva con la camara
     this.cantidadMaizTexto.setScrollFactor(0);
+
+    this.temporizadorTexto.setScrollFactor(0);
   }
 
   update() {
     if (this.cursors.left.isDown) {
-      this.jugador.setVelocityX(-500);
+      this.jugador.setVelocityX(-600);
       this.jugador.anims.play("left", true);
     }
     //move right
     else if (this.cursors.right.isDown) {
-      this.jugador.setVelocityX(500);
+      this.jugador.setVelocityX(600);
       this.jugador.anims.play("right", true);
     }
     //stop
@@ -152,7 +184,8 @@ export default class Nivel1 extends Phaser.Scene {
 
     //jump
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-500);
+      this.jugador.setVelocityY(-1000);
+      this.jugador.anims.play("jump");
     }
   }
 
@@ -160,6 +193,7 @@ export default class Nivel1 extends Phaser.Scene {
     harina.disableBody(true, true);
 
     this.cantidadHarina++;
+    this.puntajeRecolectables = +100;
 
     this.cantidadHarinaTexto.setText("H: " + this.cantidadHarina);
   }
@@ -168,9 +202,16 @@ export default class Nivel1 extends Phaser.Scene {
     maiz.disableBody(true, true);
 
     this.cantidadMaiz++;
+    this.puntajeRecolectables = +100;
 
     this.cantidadMaizTexto.setText("H: " + this.cantidadMaiz);
   }
 
   colisionCactus(jugador, cactus) {}
+
+  temporizadorDescendente() {
+    this.temporizador = this.temporizador - 1;
+    this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
+    console.log(this.temporizador);
+  }
 }
