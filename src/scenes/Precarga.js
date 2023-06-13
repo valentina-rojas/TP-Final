@@ -25,7 +25,7 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("volver", "./public/assets/images/volver.png");
     this.load.image("ajustes", "./public/assets/images/ajustes.png");
 
-    this.load.spritesheet("enemigo", "./public/assets/images/personaje.png", {
+    this.load.spritesheet("enemigo", "./public/assets/images/enemigo.png", {
       frameWidth: 200,
       frameHeight: 150,
     });
@@ -69,6 +69,27 @@ export default class Precarga extends Phaser.Scene {
       frameRate: 10,
     });
 
+
+    this.anims.create({
+      key: "left",
+      frames: this.anims.generateFrameNumbers("enemigo", {
+        start: 0,
+        end: 2,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+ this.anims.create({
+      key: "right",
+      frames: this.anims.generateFrameNumbers("enemigo", {
+        start: 3,
+        end: 5,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+    
     // init scene juego
     this.scene.start("menu");
   }
