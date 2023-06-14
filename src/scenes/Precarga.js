@@ -70,9 +70,8 @@ export default class Precarga extends Phaser.Scene {
       frameRate: 10,
     });
 
-
     this.anims.create({
-      key: "left",
+      key: "enemiesLeft",
       frames: this.anims.generateFrameNumbers("enemigo", {
         start: 0,
         end: 2,
@@ -81,8 +80,8 @@ export default class Precarga extends Phaser.Scene {
       repeat: -1,
     });
 
- this.anims.create({
-      key: "right",
+    this.anims.create({
+      key: "enemiesRight",
       frames: this.anims.generateFrameNumbers("enemigo", {
         start: 3,
         end: 5,
@@ -90,7 +89,7 @@ export default class Precarga extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
-    
+
     // init scene juego
     this.scene.start("menu");
   }

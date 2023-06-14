@@ -16,7 +16,11 @@ export default class Pausa extends Phaser.Scene {
       const botonVolver = this.add.image(1350, 1000, "volver").setInteractive();
   
       botonVolver.on("pointerup", () => {
-        this.scene.start("nivel1");
+        this.scene.stop("pausa");
+
+        // Reanuda el juego
+        this.scene.resume("nivel1");
+      
       });
 
    

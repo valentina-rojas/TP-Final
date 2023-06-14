@@ -25,14 +25,11 @@ export default class Nivel1 extends Phaser.Scene {
     const map = this.make.tilemap({ key: "map" });
 
     const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
+    const capaPlataformas = map.addTilesetImage("plataformas","tilesPlataforma");
+    const capaObstaculos = map.addTilesetImage("obstaculos", "cactus");
 
-    const capaPlataformas = map.addTilesetImage(
-      "plataformas",
-      "tilesPlataforma"
-    );
 
     const fondoLayer = map.createLayer("background", capaFondo, 0, 0);
-
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
 
     const objectosLayer = map.getObjectLayer("objetos");
@@ -40,6 +37,7 @@ export default class Nivel1 extends Phaser.Scene {
     plataformaLayer.setCollisionByProperty({ colision: true });
 
     console.log("spawn point player", objectosLayer);
+
 
     let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
     console.log(spawnPoint);
@@ -55,6 +53,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.jugador.setCollideWorldBounds(true);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+
 
     // grupo vacío del elemento harina
     this.harina = this.physics.add.group();
@@ -86,21 +85,6 @@ export default class Nivel1 extends Phaser.Scene {
       }
     });
 
-    //grupo de cactus
-    this.cactus = this.physics.add.group();
-
-    objectosLayer.objects.forEach((objData) => {
-      const { x = 0, y = 0, name } = objData;
-      switch (name) {
-        case "cactus": {
-          // añadir cactus en pantalla
-          const cactus = this.cactus.create(x, y, "cactus");
-          break;
-        }
-      }
-    });
-
-
     //grupo de enemigos
     this.enemigo = this.physics.add.group();
 
@@ -115,23 +99,34 @@ export default class Nivel1 extends Phaser.Scene {
       }
     });
 
-    //colision entre harina y plataformas
+   
+    //grupo de cactus
+    this.cactus = this.physics.add.group();
+
+    objectosLayer.objects.forEach((objData) => {
+      const { x = 0, y = 0, name } = objData;
+      switch (name) {
+        case "cactus": {
+          // añadir cactus en pantalla
+          const cactus = this.cactus.create(x, y, "cactus");
+          cactus.setImmovable(true);
+          break;
+        }
+      }
+    });
+
+    //colision entre objetos y plataformas
     this.physics.add.collider(this.harina, plataformaLayer);
     this.physics.add.collider(this.maiz, plataformaLayer);
-    this.physics.add.collider(this.cactus, plataformaLayer);
     this.physics.add.collider(this.enemigo, plataformaLayer);
+
+    this.physics.add.collider(this.cactus, plataformaLayer);
 
     this.physics.add.collider(this.enemigo, this.cactus);
 
-    this.physics.add.collider(this.jugador, this.enemigo);
+    this.physics.add.collider(this.jugador, this.cactus);
 
-    this.physics.add.collider(
-      this.jugador,
-      this.cactus,
-      this.colisionCactus,
-      null,
-      this
-    );
+    this.physics.add.collider(this.jugador, this.enemigo);
 
     //colision entre jugador y harina
     this.physics.add.collider(
@@ -190,7 +185,7 @@ export default class Nivel1 extends Phaser.Scene {
     const stopButton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     stopButton
       .on("pointerup", () => {
-        this.scene.pause("nivel1")
+        this.scene.pause("nivel1");
         this.scene.launch("pausa");
       })
       .setScrollFactor(0);
@@ -208,9 +203,37 @@ export default class Nivel1 extends Phaser.Scene {
     this.cantidadHarinaTexto.setScrollFactor(0);
     this.cantidadMaizTexto.setScrollFactor(0);
     this.temporizadorTexto.setScrollFactor(0);
-  }
+
+
+    // Añadir enemigos en pantalla
+  this.enemigo.getChildren().forEach((enemigo) => {
+    enemigo.anims.play("enemiesLeft");
+    enemigo.body.setVelocityX(-200); // Velocidad inicial del enemigo
+  });
+
+  
+  // Actualizar la posición de cada enemigo en cada fotograma
+  this.updateEnemigos = () => {
+    this.enemigo.getChildren().forEach((enemigo) => {
+      if (enemigo.body.blocked.left || enemigo.body.touching.left) {
+        // Colisión con un obstáculo a la izquierda, cambiar dirección y animación
+        enemigo.body.setVelocityX(200); // Cambiar dirección
+        enemigo.anims.play("enemiesRight", true); // Reproducir animación "right"
+      } else if (enemigo.body.blocked.right || enemigo.body.touching.right) {
+        // Colisión con un obstáculo a la derecha, cambiar dirección y animación
+        enemigo.body.setVelocityX(-200); // Cambiar dirección
+        enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
+      }
+    });
+  };
+}
+  
 
   update() {
+
+ 
+    this.updateEnemigos();
+
     //inicia escena de juego superado
     if (this.juegoSuperado) {
       this.scene.start("juegoSuperado");
@@ -241,18 +264,13 @@ export default class Nivel1 extends Phaser.Scene {
     //jump
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-1000);
-
     }
 
-    if(this.jugador.body)
-    //condicion perder si timer llega a 0
-    if (this.temporizador <= 0) {
-      this.juegoPerdido = true;
-    }
-    
-   
-     
-
+    if (this.jugador.body)
+      if (this.temporizador <= 0) {
+        //condicion perder si timer llega a 0
+        this.juegoPerdido = true;
+      }
   }
 
   recolectarHarina(jugador, harina) {
@@ -271,12 +289,6 @@ export default class Nivel1 extends Phaser.Scene {
     this.puntajeRecolectables = +100;
 
     this.cantidadMaizTexto.setText("H: " + this.cantidadMaiz);
-  }
-
-  colisionCactus(jugador, cactus) {
-    cactus.disableBody(false, false);
-    this.vidas = this.vidas - 1;
-    console.log(this.vidas);
   }
 
   temporizadorDescendente() {
