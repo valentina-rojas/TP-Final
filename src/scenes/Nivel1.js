@@ -25,9 +25,11 @@ export default class Nivel1 extends Phaser.Scene {
     const map = this.make.tilemap({ key: "map" });
 
     const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
-    const capaPlataformas = map.addTilesetImage("plataformas","tilesPlataforma");
+    const capaPlataformas = map.addTilesetImage(
+      "plataformas",
+      "tilesPlataforma"
+    );
     const capaObstaculos = map.addTilesetImage("obstaculos", "cactus");
-
 
     const fondoLayer = map.createLayer("background", capaFondo, 0, 0);
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
@@ -37,7 +39,6 @@ export default class Nivel1 extends Phaser.Scene {
     plataformaLayer.setCollisionByProperty({ colision: true });
 
     console.log("spawn point player", objectosLayer);
-
 
     let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
     console.log(spawnPoint);
@@ -53,7 +54,6 @@ export default class Nivel1 extends Phaser.Scene {
     this.jugador.setCollideWorldBounds(true);
 
     this.cursors = this.input.keyboard.createCursorKeys();
-
 
     // grupo vacío del elemento harina
     this.harina = this.physics.add.group();
@@ -99,7 +99,6 @@ export default class Nivel1 extends Phaser.Scene {
       }
     });
 
-   
     //grupo de cactus
     this.cactus = this.physics.add.group();
 
@@ -124,10 +123,15 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.physics.add.collider(this.enemigo, this.cactus);
 
-    this.physics.add.collider(this.jugador, this.cactus);
+    // Dentro del método update() cuando el jugador choca con un enemigo
+    this.physics.add.collider(this.jugador, this.enemigo, () => {
+      this.perderVida();
+    });
 
-    this.physics.add.collider(this.jugador, this.enemigo);
-
+    // Dentro del método create() cuando el jugador choca con un cactus
+    this.physics.add.collider(this.jugador, this.cactus, () => {
+      this.perderVida();
+    });
     //colision entre jugador y harina
     this.physics.add.collider(
       this.jugador,
@@ -204,34 +208,59 @@ export default class Nivel1 extends Phaser.Scene {
     this.cantidadMaizTexto.setScrollFactor(0);
     this.temporizadorTexto.setScrollFactor(0);
 
-
     // Añadir enemigos en pantalla
-  this.enemigo.getChildren().forEach((enemigo) => {
-    enemigo.anims.play("enemiesLeft");
-    enemigo.body.setVelocityX(-200); // Velocidad inicial del enemigo
-  });
-
-  
-  // Actualizar la posición de cada enemigo en cada fotograma
-  this.updateEnemigos = () => {
     this.enemigo.getChildren().forEach((enemigo) => {
-      if (enemigo.body.blocked.left || enemigo.body.touching.left) {
-        // Colisión con un obstáculo a la izquierda, cambiar dirección y animación
-        enemigo.body.setVelocityX(200); // Cambiar dirección
-        enemigo.anims.play("enemiesRight", true); // Reproducir animación "right"
-      } else if (enemigo.body.blocked.right || enemigo.body.touching.right) {
-        // Colisión con un obstáculo a la derecha, cambiar dirección y animación
-        enemigo.body.setVelocityX(-200); // Cambiar dirección
-        enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
-      }
+      enemigo.anims.play("enemiesLeft");
+      enemigo.body.setVelocityX(-200); // Velocidad inicial del enemigo
     });
-  };
-}
-  
+
+    // Actualizar la posición de cada enemigo en cada fotograma
+    this.updateEnemigos = () => {
+      this.enemigo.getChildren().forEach((enemigo) => {
+        if (enemigo.body.blocked.left || enemigo.body.touching.left) {
+          // Colisión con un obstáculo a la izquierda, cambiar dirección y animación
+          enemigo.body.setVelocityX(200); // Cambiar dirección
+          enemigo.anims.play("enemiesRight", true); // Reproducir animación "right"
+        } else if (enemigo.body.blocked.right || enemigo.body.touching.right) {
+          // Colisión con un obstáculo a la derecha, cambiar dirección y animación
+          enemigo.body.setVelocityX(-200); // Cambiar dirección
+          enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
+        }
+      });
+    };
+
+    //grupo almacenar los sprites de los corazones
+    this.corazones = this.add.group();
+
+    // Obtiene las dimensiones de la pantalla
+    const { width, height } = this.sys.game.canvas;
+
+    // Posición del extremo derecho superior
+    const posX = width - 505;
+    const posY = 70;
+
+    // Ajusta la posición de los corazones al extremo derecho superior
+    const separacionX = 1500; // Separación horizontal entre los corazones
+    const separacionY = 0; // Separación vertical entre los corazones
+
+    this.corazones.children.iterate((corazon, index) => {
+      corazon.x = posX - index * separacionX;
+      corazon.y = posY + index * separacionY;
+    });
+
+    // Número total de corazones a mostrar
+    const totalCorazones = 3;
+
+    // Crea los sprites de los corazones y añáde al grupo
+    for (let i = 0; i < totalCorazones; i++) {
+      const corazon = this.corazones.create(posX + i * 40, posY, "corazon");
+      corazon.setScrollFactor(0); // Fija los corazones para que no se muevan con la cámara
+      corazon.setOrigin(1, 0); // Ajusta el origen del sprite para alinearlos correctamente
+      corazon.x -= i * (corazon.displayWidth + 5); // Ajusta la posición en el eje x con un espacio entre ellos
+    }
+  }
 
   update() {
-
- 
     this.updateEnemigos();
 
     //inicia escena de juego superado
@@ -295,5 +324,26 @@ export default class Nivel1 extends Phaser.Scene {
     this.temporizador = this.temporizador - 1;
     this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
     //console.log(this.temporizador);
+  }
+
+  perderVida() {
+    this.vidas--; // Restar una vida al jugador
+
+    console.log(this.vidas);
+
+    if (this.vidas <= 0) {
+      // Si no quedan vidas, el juego se pierde
+      this.juegoPerdido = true;
+    }
+
+    // Ajustar la posición del jugador hacia atrás
+    this.jugador.x -= 150; // Ajusta la posición en el eje x
+
+    // O aplicarle una velocidad hacia atrás
+    this.jugador.setVelocityX(-500); // Ajusta la velocidad
+
+    // Cambiar el sprite del corazón a uno gris
+    const corazon = this.corazones.getChildren()[this.vidas];
+    corazon.setTexture("corazonGris");
   }
 }
