@@ -313,8 +313,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":19644,
-                 "y":1156
+                 "x":18840,
+                 "y":552
                 }, 
                 {
                  "height":0,
@@ -327,6 +327,30 @@
                  "width":0,
                  "x":7008,
                  "y":280
+                }, 
+                {
+                 "height":0,
+                 "id":22,
+                 "name":"maiz",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":17652,
+                 "y":964
+                }, 
+                {
+                 "height":0,
+                 "id":23,
+                 "name":"salida",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":19648,
+                 "y":1116
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -335,7 +359,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":22,
+ "nextobjectid":24,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

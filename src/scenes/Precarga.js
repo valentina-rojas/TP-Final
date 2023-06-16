@@ -31,7 +31,10 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("nube", "./public/assets/images/nube.png");
     this.load.image("cielo", "./public/assets/images/cielo.png");
     this.load.image("montañas", "./public/assets/images/montañas.png");
+    this.load.image("salida", "./public/assets/images/salida.png");
 
+
+    this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");
 
     this.load.spritesheet("enemigo", "./public/assets/images/enemigo.png", {
       frameWidth: 200,
@@ -104,7 +107,7 @@ export default class Precarga extends Phaser.Scene {
         end: 18,
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
 
     this.anims.create({
@@ -114,7 +117,7 @@ export default class Precarga extends Phaser.Scene {
         end: 0,
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
 
 
@@ -125,7 +128,7 @@ export default class Precarga extends Phaser.Scene {
         end: 2,
       }),
       frameRate: 10,
-      repeat: 0,
+      repeat: -1,
     });
 
     this.anims.create({
@@ -135,7 +138,7 @@ export default class Precarga extends Phaser.Scene {
         end: 5,
       }),
       frameRate: 10,
-      repeat: 0,
+      repeat: -1,
     });
 
 

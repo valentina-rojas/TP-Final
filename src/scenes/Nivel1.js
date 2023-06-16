@@ -60,6 +60,10 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     this.jugador.setBounce(0.1);
     this.jugador.setCollideWorldBounds(true);
 
+    spawnPoint = map.findObject("objetos", (obj) => obj.name === "salida");
+    console.log("spawn point salida ", spawnPoint);
+    this.salida = this.physics.add
+      .sprite(spawnPoint.x, spawnPoint.y, "salida")
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -123,6 +127,7 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     });
 
     //colision entre objetos y plataformas
+    this.physics.add.collider(this.salida, plataformaLayer);
     this.physics.add.collider(this.harina, plataformaLayer);
     this.physics.add.collider(this.maiz, plataformaLayer);
     this.physics.add.collider(this.enemigo, plataformaLayer);
@@ -154,6 +159,15 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
       this.jugador,
       this.maiz,
       this.recolectarMaiz,
+      null,
+      this
+    );
+
+    //overlap entre jugador y salida
+    this.physics.add.overlap(
+      this.jugador,
+      this.salida,
+      this.verificarRecolectables,
       null,
       this
     );
@@ -268,6 +282,7 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     }
 
 
+    this.recolectable = this.sound.add("recolectado");
   }
 
   update() {
@@ -331,6 +346,7 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     const explosion = this.add.sprite(harina.x, harina.y, "explosion");
     explosion.play("explosion");
 
+    this.recolectable.play();
 
     this.cantidadHarina++;
     this.puntajeRecolectables = +100;
@@ -346,7 +362,8 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     const explosion = this.add.sprite(maiz.x, maiz.y, "explosion");
     explosion.play("explosion");
 
-
+    this.recolectable.play();
+    
     this.cantidadMaiz++;
     this.puntajeRecolectables = +100;
 
@@ -357,11 +374,24 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     this.temporizador = this.temporizador - 1;
     this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
     //console.log(this.temporizador);
+
+    if(this.jugador.body)
+    //condicion perder si timer llega a 0
+    if (this.temporizador <= 0) {
+      this.juegoPerdido = true;
+    }
+  }
+
+  verificarRecolectables() {
+
+    if ( this.cantidadMaiz >= 1 && this.cantidadHarina >= 1) {
+
+      this.juegoSuperado = true
+    }
   }
 
   perderVida() {
 
-  
     // restar una vida al jugador
     this.vidas--; 
 
@@ -382,10 +412,9 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     // cambiar el sprite del corazón a uno gris
     const corazon = this.corazones.getChildren()[this.vidas];
     corazon.setTexture("corazonGris");
-
-
     
   }
+
   }
 
 
