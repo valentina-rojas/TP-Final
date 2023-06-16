@@ -29,10 +29,17 @@ export default class Nivel1 extends Phaser.Scene {
       "plataformas",
       "tilesPlataforma"
     );
-    const capaObstaculos = map.addTilesetImage("obstaculos", "cactus");
+  
+    
+   
 
     const fondoLayer = map.createLayer("background", capaFondo, 0, 0);
-    const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
+   
+
+const capaMontañas =  map.addTilesetImage("montañas", "montañas");
+const montañasLayer = map.createLayer("mountains", capaMontañas, 0, 0);
+
+const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
 
     const objectosLayer = map.getObjectLayer("objetos");
 
@@ -52,6 +59,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.physics.add.collider(this.jugador, plataformaLayer);
     this.jugador.setBounce(0.1);
     this.jugador.setCollideWorldBounds(true);
+
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -258,6 +266,8 @@ export default class Nivel1 extends Phaser.Scene {
       corazon.setOrigin(1, 0); // Ajusta el origen del sprite para alinearlos correctamente
       corazon.x -= i * (corazon.displayWidth + 5); // Ajusta la posición en el eje x con un espacio entre ellos
     }
+
+
   }
 
   update() {
@@ -275,44 +285,67 @@ export default class Nivel1 extends Phaser.Scene {
 
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-600);
-      this.jugador.anims.play("left", true);
-    }
-
-    //move right
-    else if (this.cursors.right.isDown) {
+      if (this.jugador.body.blocked.down) {
+        this.jugador.anims.play("left", true);
+      } else {
+        this.jugador.anims.play("jumpLeft", true);
+      }
+    } else if (this.cursors.right.isDown) {
       this.jugador.setVelocityX(600);
-      this.jugador.anims.play("right", true);
-    }
-
-    //stop
-    else {
+      if (this.jugador.body.blocked.down) {
+        this.jugador.anims.play("right", true);
+      } else {
+        this.jugador.anims.play("jumpRight", true);
+      }
+    } else {
       this.jugador.setVelocityX(0);
-      this.jugador.anims.play("turn");
+      if (this.jugador.body.blocked.down) {
+        this.jugador.anims.play("turn");
+      } else {
+        if (this.jugador.body.velocity.x > 0) {
+          this.jugador.anims.play("jumpRight", true);
+        } else if (this.jugador.body.velocity.x < 0) {
+          this.jugador.anims.play("jumpLeft", true);
+        } 
+      }
     }
-
-    //jump
+  
+    // Jumping logic
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-1000);
+      if (this.jugador.body.velocity.x > 0) {
+     this.jugador.anims.play("jumpRight");
+  } else if (this.jugador.body.velocity.x < 0) {
+      this.jugador.anims.play("jumpLeft");
+     }
     }
 
-    if (this.jugador.body)
-      if (this.temporizador <= 0) {
-        //condicion perder si timer llega a 0
-        this.juegoPerdido = true;
-      }
   }
+
+  
+  
 
   recolectarHarina(jugador, harina) {
     harina.disableBody(true, true);
+
+    const explosion = this.add.sprite(harina.x, harina.y, "explosion");
+    explosion.play("explosion");
+
 
     this.cantidadHarina++;
     this.puntajeRecolectables = +100;
 
     this.cantidadHarinaTexto.setText("H: " + this.cantidadHarina);
+
+    
   }
 
   recolectarMaiz(jugador, maiz) {
     maiz.disableBody(true, true);
+    
+    const explosion = this.add.sprite(maiz.x, maiz.y, "explosion");
+    explosion.play("explosion");
+
 
     this.cantidadMaiz++;
     this.puntajeRecolectables = +100;
@@ -327,23 +360,35 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   perderVida() {
-    this.vidas--; // Restar una vida al jugador
+
+  
+    // restar una vida al jugador
+    this.vidas--; 
 
     console.log(this.vidas);
 
     if (this.vidas <= 0) {
-      // Si no quedan vidas, el juego se pierde
+      // si no quedan vidas, el juego se pierde
       this.juegoPerdido = true;
     }
 
-    // Ajustar la posición del jugador hacia atrás
-    this.jugador.x -= 150; // Ajusta la posición en el eje x
+    // hacer que el juagdor retroceda
+    this.jugador.x -= 150; 
+   // this.jugador.y -= 100;
 
-    // O aplicarle una velocidad hacia atrás
-    this.jugador.setVelocityX(-500); // Ajusta la velocidad
+    // velocidad hacia atrás
+    this.jugador.setVelocityX(-200); 
 
-    // Cambiar el sprite del corazón a uno gris
+    // cambiar el sprite del corazón a uno gris
     const corazon = this.corazones.getChildren()[this.vidas];
     corazon.setTexture("corazonGris");
+
+
+    
   }
-}
+  }
+
+
+
+
+

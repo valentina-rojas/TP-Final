@@ -10,7 +10,7 @@ export default class Pausa extends Phaser.Scene {
     preload() {}
   
     create() {
-      this.add.image(400, 1000, "tilesFondo");
+      this.add.image( 1333,1000,"fondoPausa");
   
       //botón para volver al menu
       const botonVolver = this.add.image(1350, 1000, "volver").setInteractive();
@@ -24,6 +24,7 @@ export default class Pausa extends Phaser.Scene {
       });
 
    
+      
       
     }
   

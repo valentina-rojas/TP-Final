@@ -27,7 +27,10 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("reanudar", "./public/assets/images/reanudar.png");
     this.load.image("corazon", "./public/assets/images/corazon.png");
     this.load.image("corazonGris", "./public/assets/images/corazongris.png");
-
+    this.load.image("fondoPausa", "./public/assets/images/fondoPausa.png");
+    this.load.image("nube", "./public/assets/images/nube.png");
+    this.load.image("cielo", "./public/assets/images/cielo.png");
+    this.load.image("montañas", "./public/assets/images/montañas.png");
 
 
     this.load.spritesheet("enemigo", "./public/assets/images/enemigo.png", {
@@ -36,17 +39,23 @@ export default class Precarga extends Phaser.Scene {
     });
 
     this.load.spritesheet("personaje", "./public/assets/images/personaje.png", {
-      frameWidth: 222,
-      frameHeight: 352,
+      frameWidth: 256,
+      frameHeight: 351,
     });
+
+    this.load.spritesheet("explosion", "./public/assets/images/explosion.png", {
+      frameWidth: 150,
+      frameHeight: 150,
+    }) 
   }
 
   create() {
+
     this.anims.create({
       key: "left",
       frames: this.anims.generateFrameNumbers("personaje", {
-        start: 1,
-        end: 4,
+        start: 8,
+        end: 5,
       }),
       frameRate: 10,
       repeat: -1,
@@ -54,25 +63,60 @@ export default class Precarga extends Phaser.Scene {
 
     this.anims.create({
       key: "turn",
-      frames: [{ key: "personaje", frame: 5 }],
+      frames: [{ key: "personaje", frame: 9 }],
       frameRate: 20,
     });
 
     this.anims.create({
       key: "right",
       frames: this.anims.generateFrameNumbers("personaje", {
-        start: 6,
-        end: 9,
+        start: 10,
+        end: 13,
       }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
-      key: "jump",
-      frames: [{ key: "personaje", frame: 10 }],
+      key: "jumpLeft",
+      frames: this.anims.generateFrameNumbers("personaje", {
+        start: 4,
+        end: 3,
+      }),
       frameRate: 10,
+      repeat: -1,
     });
+
+    this.anims.create({
+      key: "jumpRight",
+      frames: this.anims.generateFrameNumbers("personaje", {
+        start: 14,
+        end: 15,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "damageRight",
+      frames: this.anims.generateFrameNumbers("personaje", {
+        start: 16,
+        end: 18,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "damageLeft",
+      frames: this.anims.generateFrameNumbers("personaje", {
+        start: 2,
+        end: 0,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
 
     this.anims.create({
       key: "enemiesLeft",
@@ -81,7 +125,7 @@ export default class Precarga extends Phaser.Scene {
         end: 2,
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
 
     this.anims.create({
@@ -91,11 +135,26 @@ export default class Precarga extends Phaser.Scene {
         end: 5,
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: 0,
     });
 
+
+    this.anims.create({
+      key: "explosion",
+      frames: this.anims.generateFrameNumbers("explosion", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 10,
+      repeat: 0,
+      hideOnComplete: true,
+    });
+    
     // init scene juego
     this.scene.start("menu");
+
+
+
   }
 
   update() {}

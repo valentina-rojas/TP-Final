@@ -4,7 +4,9 @@ export default class Menu extends Phaser.Scene {
     // the key will be used to start the scene by other scenes
     super("menu");
   }
+preloaad (){
 
+}
   create() {
     this.add.image(400, 1000, "tilesFondo");
 

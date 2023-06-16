@@ -10,7 +10,8 @@ export default class Ayuda extends Phaser.Scene {
   preload() {}
 
   create() {
-    this.add.image(400, 1000, "tilesFondo");
+    this.add.image( 1333,1000,"fondoPausa");
+    
 
     //botón para volver al menu
     const Button = this.add.image(1350, 1000, "volver").setInteractive();
