@@ -10,7 +10,6 @@ export default class Nivel1 extends Phaser.Scene {
   init() {
     this.cantidadHarina = 0;
     this.cantidadMaiz = 0;
-    this.puntajeRecolectables = 0;
     this.puntajeFinal = 0;
     this.temporizador = 90;
     this.vidas = 3;
@@ -25,21 +24,29 @@ export default class Nivel1 extends Phaser.Scene {
     const map = this.make.tilemap({ key: "map" });
 
     const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
+    const fondoLayer = map
+      .createLayer("background", capaFondo, 0, 0)
+      .setOrigin(0)
+      .setScrollFactor(0, 1);
+
     const capaPlataformas = map.addTilesetImage(
       "plataformas",
       "tilesPlataforma"
     );
-  
-    
-   
 
-    const fondoLayer = map.createLayer("background", capaFondo, 0, 0);
-   
+    const capaMontañas = map.addTilesetImage("montañas", "montañas");
+    const montañasLayer = map
+      .createLayer("mountains", capaMontañas, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(0.5);
 
-const capaMontañas =  map.addTilesetImage("montañas", "montañas");
-const montañasLayer = map.createLayer("mountains", capaMontañas, 0, 0);
+    const capaSuelo = map.addTilesetImage("suelo", "suelo");
+    const sueloLayer = map
+      .createLayer("floor", capaSuelo, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(1);
 
-const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
+    const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
 
     const objectosLayer = map.getObjectLayer("objetos");
 
@@ -62,8 +69,7 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
 
     spawnPoint = map.findObject("objetos", (obj) => obj.name === "salida");
     console.log("spawn point salida ", spawnPoint);
-    this.salida = this.physics.add
-      .sprite(spawnPoint.x, spawnPoint.y, "salida")
+    this.salida = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "salida");
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -126,25 +132,28 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
       }
     });
 
-    //colision entre objetos y plataformas
     this.physics.add.collider(this.salida, plataformaLayer);
     this.physics.add.collider(this.harina, plataformaLayer);
     this.physics.add.collider(this.maiz, plataformaLayer);
     this.physics.add.collider(this.enemigo, plataformaLayer);
-
     this.physics.add.collider(this.cactus, plataformaLayer);
-
     this.physics.add.collider(this.enemigo, this.cactus);
 
-    // Dentro del método update() cuando el jugador choca con un enemigo
-    this.physics.add.collider(this.jugador, this.enemigo, () => {
-      this.perderVida();
-    });
+    this.physics.add.collider(
+      this.jugador,
+      this.cactus,
+      this.perderVida,
+      null,
+      this
+    );
 
-    // Dentro del método create() cuando el jugador choca con un cactus
-    this.physics.add.collider(this.jugador, this.cactus, () => {
-      this.perderVida();
-    });
+    this.physics.add.collider(
+      this.jugador,
+      this.enemigo,
+      this.perderVida,
+      null,
+      this
+    );
     //colision entre jugador y harina
     this.physics.add.collider(
       this.jugador,
@@ -236,21 +245,6 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
       enemigo.body.setVelocityX(-200); // Velocidad inicial del enemigo
     });
 
-    // Actualizar la posición de cada enemigo en cada fotograma
-    this.updateEnemigos = () => {
-      this.enemigo.getChildren().forEach((enemigo) => {
-        if (enemigo.body.blocked.left || enemigo.body.touching.left) {
-          // Colisión con un obstáculo a la izquierda, cambiar dirección y animación
-          enemigo.body.setVelocityX(200); // Cambiar dirección
-          enemigo.anims.play("enemiesRight", true); // Reproducir animación "right"
-        } else if (enemigo.body.blocked.right || enemigo.body.touching.right) {
-          // Colisión con un obstáculo a la derecha, cambiar dirección y animación
-          enemigo.body.setVelocityX(-200); // Cambiar dirección
-          enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
-        }
-      });
-    };
-
     //grupo almacenar los sprites de los corazones
     this.corazones = this.add.group();
 
@@ -262,7 +256,7 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     const posY = 70;
 
     // Ajusta la posición de los corazones al extremo derecho superior
-    const separacionX = 1500; // Separación horizontal entre los corazones
+    const separacionX = 200; // Separación horizontal entre los corazones
     const separacionY = 0; // Separación vertical entre los corazones
 
     this.corazones.children.iterate((corazon, index) => {
@@ -278,9 +272,8 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
       const corazon = this.corazones.create(posX + i * 40, posY, "corazon");
       corazon.setScrollFactor(0); // Fija los corazones para que no se muevan con la cámara
       corazon.setOrigin(1, 0); // Ajusta el origen del sprite para alinearlos correctamente
-      corazon.x -= i * (corazon.displayWidth + 5); // Ajusta la posición en el eje x con un espacio entre ellos
+      corazon.x -= i * (corazon.displayWidth + 45); // Ajusta la posición en el eje x con un espacio entre ellos
     }
-
 
     this.recolectable = this.sound.add("recolectado");
   }
@@ -290,13 +283,21 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
 
     //inicia escena de juego superado
     if (this.juegoSuperado) {
-      this.scene.start("juegoSuperado");
+      //llama a funcion para calcular el puntaje
+      this.calcularPuntaje();
+
+      //inicio de escena
+      this.scene.start("nivelSuperado", {
+        puntajeFinal: this.puntajeFinal, //traspaso de data del puntaje
+      });
     }
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
-      this.scene.start("juegoPerdido");
+      this.scene.start("nivelPerdido");
     }
+
+    //movimiento de personaje
 
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-600);
@@ -321,24 +322,20 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
           this.jugador.anims.play("jumpRight", true);
         } else if (this.jugador.body.velocity.x < 0) {
           this.jugador.anims.play("jumpLeft", true);
-        } 
+        }
       }
     }
-  
+
     // Jumping logic
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-1000);
       if (this.jugador.body.velocity.x > 0) {
-     this.jugador.anims.play("jumpRight");
-  } else if (this.jugador.body.velocity.x < 0) {
-      this.jugador.anims.play("jumpLeft");
-     }
+        this.jugador.anims.play("jumpRight");
+      } else if (this.jugador.body.velocity.x < 0) {
+        this.jugador.anims.play("jumpLeft");
+      }
     }
-
   }
-
-  
-  
 
   recolectarHarina(jugador, harina) {
     harina.disableBody(true, true);
@@ -349,23 +346,19 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     this.recolectable.play();
 
     this.cantidadHarina++;
-    this.puntajeRecolectables = +100;
 
     this.cantidadHarinaTexto.setText("H: " + this.cantidadHarina);
-
-    
   }
 
   recolectarMaiz(jugador, maiz) {
     maiz.disableBody(true, true);
-    
+
     const explosion = this.add.sprite(maiz.x, maiz.y, "explosion");
     explosion.play("explosion");
 
     this.recolectable.play();
-    
+
     this.cantidadMaiz++;
-    this.puntajeRecolectables = +100;
 
     this.cantidadMaizTexto.setText("H: " + this.cantidadMaiz);
   }
@@ -375,49 +368,67 @@ const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
     this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
     //console.log(this.temporizador);
 
-    if(this.jugador.body)
-    //condicion perder si timer llega a 0
-    if (this.temporizador <= 0) {
-      this.juegoPerdido = true;
-    }
+    if (this.jugador.body)
+      if (this.temporizador <= 0) {
+        //condicion perder si timer llega a 0
+        this.juegoPerdido = true;
+      }
   }
 
   verificarRecolectables() {
-
-    if ( this.cantidadMaiz >= 1 && this.cantidadHarina >= 1) {
-
-      this.juegoSuperado = true
+    if (this.cantidadMaiz >= 1 && this.cantidadHarina >= 1) {
+      this.juegoSuperado = true;
     }
   }
 
   perderVida() {
+    if (this.jugador.body.blocked.left) {
+      this.jugador.x += 150;
+      console.log("choque izquierda");
+      this.jugador.body.setVelocityX(200);
+      this.jugador.anims.play("damageLeft");
+    } else if (this.jugador.body.blocked.right) {
+      this.jugador.x -= 150;
+      console.log("choque derecha");
+      this.jugador.body.setVelocityX(-200);
+      this.jugador.anims.play("damageRight");
+    }
 
     // restar una vida al jugador
-    this.vidas--; 
+    this.vidas--;
 
     console.log(this.vidas);
+
+    // cambiar el sprite del corazón a uno gris
+    const corazon = this.corazones.getChildren()[this.vidas];
+    corazon.setTexture("corazonGris");
 
     if (this.vidas <= 0) {
       // si no quedan vidas, el juego se pierde
       this.juegoPerdido = true;
     }
-
-    // hacer que el juagdor retroceda
-    this.jugador.x -= 150; 
-   // this.jugador.y -= 100;
-
-    // velocidad hacia atrás
-    this.jugador.setVelocityX(-200); 
-
-    // cambiar el sprite del corazón a uno gris
-    const corazon = this.corazones.getChildren()[this.vidas];
-    corazon.setTexture("corazonGris");
-    
   }
 
+  calcularPuntaje() {
+    const puntajeElementos = (this.cantidadHarina + this.cantidadMaiz) * 100;
+    const puntajeVidas = this.vidas * 500;
+    const puntajeTiempo = this.temporizador * 10;
+
+    this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
 
-
-
-
-
+  // Actualizar la posición de cada enemigo en cada fotograma
+  updateEnemigos() {
+    this.enemigo.getChildren().forEach((enemigo) => {
+      if (enemigo.body.blocked.left || enemigo.body.touching.left) {
+        // Colisión con un obstáculo a la izquierda, cambiar dirección y animación
+        enemigo.body.setVelocityX(200); // Cambiar dirección
+        enemigo.anims.play("enemiesRight", true); // Reproducir animación "right"
+      } else if (enemigo.body.blocked.right || enemigo.body.touching.right) {
+        // Colisión con un obstáculo a la derecha, cambiar dirección y animación
+        enemigo.body.setVelocityX(-200); // Cambiar dirección
+        enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
+      }
+    });
+  }
+}
