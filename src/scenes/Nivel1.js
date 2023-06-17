@@ -34,6 +34,13 @@ export default class Nivel1 extends Phaser.Scene {
       "tilesPlataforma"
     );
 
+    const capaNubes = map.addTilesetImage("nubes", "nube");
+    const nibesLayer = map
+      .createLayer("clouds", capaNubes, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(0.25);
+
+
     const capaMontañas = map.addTilesetImage("montañas", "montañas");
     const montañasLayer = map
       .createLayer("mountains", capaMontañas, 0, 0)
