@@ -8,8 +8,6 @@ export default class Precarga extends Phaser.Scene {
   init() {}
 
   preload() {
-
-
     this.load.tilemapTiledJSON("map", "./public/assets/tilemaps/nivel1.json");
     this.load.tilemapTiledJSON("map2", "./public/assets/tilemaps/nivel2.json");
 
@@ -37,15 +35,17 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("suelo", "./public/assets/images/suelo.png");
     this.load.image("salida", "./public/assets/images/salida.png");
 
-
-this.load.image("cielo2", "./public/assets/images/nivel2/cielo.png")
-this.load.image("arboles", "./public/assets/images/nivel2/arboles.png")
-this.load.image("arbustos1", "./public/assets/images/nivel2/arbustos1.png")
-this.load.image("arbustos2", "./public/assets/images/nivel2/arbustos2.png")
-this.load.image("edificios", "./public/assets/images/nivel2/edificios.png")
-this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png")
-this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png")
-this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
+    this.load.image("cielo2", "./public/assets/images/nivel2/cielo.png");
+    this.load.image("arboles", "./public/assets/images/nivel2/arboles.png");
+    this.load.image("arbustos1", "./public/assets/images/nivel2/arbustos1.png");
+    this.load.image("arbustos2", "./public/assets/images/nivel2/arbustos2.png");
+    this.load.image("edificios", "./public/assets/images/nivel2/edificios.png");
+    this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png");
+    this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png");
+    this.load.image(
+      "plataformas2",
+      "./public/assets/images/nivel2/plataformas.png"
+    );
 
     this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");
 
@@ -62,11 +62,10 @@ this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
     this.load.spritesheet("explosion", "./public/assets/images/explosion.png", {
       frameWidth: 150,
       frameHeight: 150,
-    }) 
+    });
   }
 
   create() {
-
     this.anims.create({
       key: "left",
       frames: this.anims.generateFrameNumbers("personaje", {
@@ -121,7 +120,6 @@ this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
       }),
       frameRate: 5,
       repeat: 0,
-    
     });
 
     this.anims.create({
@@ -133,7 +131,6 @@ this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
       frameRate: 5,
       repeat: 0,
     });
-
 
     this.anims.create({
       key: "enemiesLeft",
@@ -155,7 +152,6 @@ this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
       repeat: -1,
     });
 
-
     this.anims.create({
       key: "explosion",
       frames: this.anims.generateFrameNumbers("explosion", {
@@ -166,12 +162,9 @@ this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
       repeat: 0,
       hideOnComplete: true,
     });
-    
+
     // init scene juego
     this.scene.start("nivel2");
-
-
-
   }
 
   update() {}
