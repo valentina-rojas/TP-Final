@@ -333,7 +333,7 @@ export default class Nivel1 extends Phaser.Scene {
       }
     }
 
-    // Jumping logic
+  
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-1000);
       if (this.jugador.body.velocity.x > 0) {

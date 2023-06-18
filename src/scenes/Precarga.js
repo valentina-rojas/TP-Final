@@ -8,7 +8,10 @@ export default class Precarga extends Phaser.Scene {
   init() {}
 
   preload() {
+
+
     this.load.tilemapTiledJSON("map", "./public/assets/tilemaps/nivel1.json");
+    this.load.tilemapTiledJSON("map2", "./public/assets/tilemaps/nivel2.json");
 
     this.load.image("tilesFondo", "./public/assets/images/fondo.png");
     this.load.image(
@@ -34,6 +37,15 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("suelo", "./public/assets/images/suelo.png");
     this.load.image("salida", "./public/assets/images/salida.png");
 
+
+this.load.image("cielo2", "./public/assets/images/nivel2/cielo.png")
+this.load.image("arboles", "./public/assets/images/nivel2/arboles.png")
+this.load.image("arbustos1", "./public/assets/images/nivel2/arbustos1.png")
+this.load.image("arbustos2", "./public/assets/images/nivel2/arbustos2.png")
+this.load.image("edificios", "./public/assets/images/nivel2/edificios.png")
+this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png")
+this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png")
+this.load.image("plataformas2", "./public/assets/images/nivel2/plataformas.png")
 
     this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");
 
@@ -156,7 +168,7 @@ export default class Precarga extends Phaser.Scene {
     });
     
     // init scene juego
-    this.scene.start("menu");
+    this.scene.start("nivel2");
 
 
 
