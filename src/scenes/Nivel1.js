@@ -29,30 +29,41 @@ export default class Nivel1 extends Phaser.Scene {
       .setOrigin(0)
       .setScrollFactor(0, 1);
 
-    const capaPlataformas = map.addTilesetImage(
-      "plataformas",
-      "tilesPlataforma"
-    );
+  
 
-    const capaNubes = map.addTilesetImage("nubes", "nube");
-    const nibesLayer = map
-      .createLayer("clouds", capaNubes, 0, 0)
-      .setOrigin(0, 1)
-      .setScrollFactor(0.25);
 
 
     const capaMontañas = map.addTilesetImage("montañas", "montañas");
     const montañasLayer = map
       .createLayer("mountains", capaMontañas, 0, 0)
       .setOrigin(0, 1)
+      .setScrollFactor(0.25);
+      
+
+      const capaArbustos1 = map.addTilesetImage("arbustos1", "arbustos01");
+    const arbustos1Layer = map
+      .createLayer("bushes1", capaArbustos1, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(0.4);
+
+    const capaArbustos2 = map.addTilesetImage("arbustos2", "arbustos02");
+    const arbustos2Layer = map
+      .createLayer("bushes2", capaArbustos2, 0, 0)
+      .setOrigin(0, 1)
       .setScrollFactor(0.5);
+
 
     const capaSuelo = map.addTilesetImage("suelo", "suelo");
     const sueloLayer = map
       .createLayer("floor", capaSuelo, 0, 0)
       .setOrigin(0, 1)
-      .setScrollFactor(1);
+      .setScrollFactor(0.75);
 
+
+      const capaPlataformas = map.addTilesetImage(
+        "plataformas",
+        "tilesPlataforma"
+      );
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
 
     const objectosLayer = map.getObjectLayer("objetos");
@@ -335,7 +346,7 @@ export default class Nivel1 extends Phaser.Scene {
 
   
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-1000);
+      this.jugador.setVelocityY(-900);
       if (this.jugador.body.velocity.x > 0) {
         this.jugador.anims.play("jumpRight");
       } else if (this.jugador.body.velocity.x < 0) {
