@@ -5,7 +5,11 @@ export default class Nivel2 extends Phaser.Scene {
     super("nivel2");
   }
 
-  init() {}
+  init() {
+    this.cantidadPan = 0;
+    this.cantidadCarne = 0;
+    this.temporizador = 90;
+  }
 
   preload() {}
 
@@ -36,19 +40,17 @@ export default class Nivel2 extends Phaser.Scene {
       .setOrigin(0, 1)
       .setScrollFactor(0.5);
 
-  
     const capaArboles = map.addTilesetImage("arboles", "arboles");
     const arbolesLayer = map
       .createLayer("trees", capaArboles, 0, 0)
       .setOrigin(0, 1)
       .setScrollFactor(0.75);
 
-      const capaSuelo = map.addTilesetImage("suelo", "suelo2");
-      const sueloLayer = map
-        .createLayer("floor", capaSuelo, 0, 0)
-        .setOrigin(0, 1)
-        .setScrollFactor(1);
-  
+    const capaSuelo = map.addTilesetImage("suelo", "suelo2");
+    const sueloLayer = map
+      .createLayer("floor", capaSuelo, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(1);
 
     const capaPlataformas = map.addTilesetImage("plataformas", "plataformas2");
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
@@ -71,6 +73,91 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    // grupo vacío del elemento pan
+    this.pan = this.physics.add.group();
+
+    // si el tipo es "pan" agregar al grupo
+    objectosLayer.objects.forEach((objData) => {
+      const { x = 0, y = 0, name } = objData;
+      switch (name) {
+        case "pan": {
+          // añadir en pantalla
+          const pan = this.pan.create(x, y, "pan");
+          break;
+        }
+      }
+    });
+
+    // grupo vacío del elemento pan
+    this.carne = this.physics.add.group();
+
+    // si el tipo es "pan" agregar al grupo
+    objectosLayer.objects.forEach((objData) => {
+      const { x = 0, y = 0, name } = objData;
+      switch (name) {
+        case "carne": {
+          // añadir en pantalla
+          const carne = this.carne.create(x, y, "carne");
+          break;
+        }
+      }
+    });
+
+    this.physics.add.collider(this.pan, plataformaLayer);
+    this.physics.add.collider(this.carne, plataformaLayer);
+
+    this.physics.add.collider(
+      this.jugador,
+      this.pan,
+      this.recolectarPan,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      this.jugador,
+      this.carne,
+      this.recolectarCarne,
+      null,
+      this
+    );
+
+    //temporizador
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.temporizadorDescendente,
+      callbackScope: this,
+      loop: true,
+    });
+
+    //texto que muestra el temporizador
+    this.temporizadorTexto = this.add
+      .text(15, 150, "Tiempo: " + this.temporizador, {
+        fontSize: "80px",
+        fill: "#ffffff",
+        fontFamily: "arial",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
+
+    this.cantidadPanTexto = this.add
+      .text(15, 15, "P: 0", {
+        fontSize: "80px",
+        fill: "#FFFFFF",
+        fontFamily: "arial",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
+
+    this.cantidadCarneTexto = this.add
+      .text(15, 80, "C: 0", {
+        fontSize: "80px",
+        fill: "#FFFFFF",
+        fontFamily: "arial",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
+
     //camara
     this.cameras.main.startFollow(this.jugador);
 
@@ -79,6 +166,8 @@ export default class Nivel2 extends Phaser.Scene {
 
     //para que la camara no se vaya fuera del mapa
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    this.recolectable = this.sound.add("recolectado");
   }
 
   update() {
@@ -119,5 +208,43 @@ export default class Nivel2 extends Phaser.Scene {
         this.jugador.anims.play("jumpLeft");
       }
     }
+  }
+
+  recolectarPan(jugador, pan) {
+    pan.disableBody(true, true);
+
+    const explosion = this.add.sprite(pan.x, pan.y, "explosion");
+    explosion.play("explosion");
+
+    this.recolectable.play();
+
+    this.cantidadPan++;
+
+    this.cantidadPanTexto.setText("H: " + this.cantidadPan);
+  }
+
+  recolectarCarne(jugador, carne) {
+    carne.disableBody(true, true);
+
+    const explosion = this.add.sprite(carne.x, carne.y, "explosion");
+    explosion.play("explosion");
+
+    this.recolectable.play();
+
+    this.cantidadCarne++;
+
+    this.cantidadCarneTexto.setText("H: " + this.cantidadCarne);
+  }
+
+  temporizadorDescendente() {
+    this.temporizador = this.temporizador - 1;
+    this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
+    //console.log(this.temporizador);
+
+    if (this.jugador.body)
+      if (this.temporizador <= 0) {
+        //condicion perder si timer llega a 0
+        this.juegoPerdido = true;
+      }
   }
 }

@@ -235,6 +235,102 @@
                  "width":0,
                  "x":312,
                  "y":1108
+                }, 
+                {
+                 "height":0,
+                 "id":2,
+                 "name":"pan",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2096,
+                 "y":928
+                }, 
+                {
+                 "height":0,
+                 "id":3,
+                 "name":"carne",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":5624,
+                 "y":984
+                }, 
+                {
+                 "height":0,
+                 "id":4,
+                 "name":"salida",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":19736,
+                 "y":952
+                }, 
+                {
+                 "height":0,
+                 "id":5,
+                 "name":"pan",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":8208,
+                 "y":944
+                }, 
+                {
+                 "height":0,
+                 "id":6,
+                 "name":"carne",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":12872,
+                 "y":472
+                }, 
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"pan",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":15296,
+                 "y":880
+                }, 
+                {
+                 "height":0,
+                 "id":8,
+                 "name":"pan",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":16888,
+                 "y":864
+                }, 
+                {
+                 "height":0,
+                 "id":10,
+                 "name":"carne",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":16120,
+                 "y":864
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -243,7 +339,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":2,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
@@ -355,7 +451,7 @@
                  "value":true
                 }],
          "spacing":0,
-         "tilecount":156,
+         "tilecount":4,
          "tileheight":100,
          "tiles":[
                 {
