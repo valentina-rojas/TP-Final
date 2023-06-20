@@ -51,6 +51,7 @@ export default class Precarga extends Phaser.Scene {
     );
     this.load.image("pan", "./public/assets/images/nivel2/pan.png");
     this.load.image("carne", "./public/assets/images/nivel2/carne.png");
+    this.load.image("maleza", "./public/assets/images/nivel2/maleza.png");
 
 
     this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");

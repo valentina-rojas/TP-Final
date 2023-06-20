@@ -9,6 +9,11 @@ export default class Nivel2 extends Phaser.Scene {
     this.cantidadPan = 0;
     this.cantidadCarne = 0;
     this.temporizador = 90;
+    this.puntajeFinal = 0;
+    this.vidas = 3;
+
+    this.juegoSuperado = false;
+    this.juegoPerdido = false;
   }
 
   preload() {}
@@ -88,10 +93,10 @@ export default class Nivel2 extends Phaser.Scene {
       }
     });
 
-    // grupo vacío del elemento pan
+    // grupo vacío del elemento carne
     this.carne = this.physics.add.group();
 
-    // si el tipo es "pan" agregar al grupo
+    // si el tipo es "carne" agregar al grupo
     objectosLayer.objects.forEach((objData) => {
       const { x = 0, y = 0, name } = objData;
       switch (name) {
@@ -103,8 +108,22 @@ export default class Nivel2 extends Phaser.Scene {
       }
     });
 
+    this.maleza = this.physics.add.group();
+
+    objectosLayer.objects.forEach((objData) => {
+      const { x = 0, y = 0, name } = objData;
+      switch (name) {
+        case "maleza": {
+          const maleza = this.maleza.create(x, y, "maleza");
+          maleza.setImmovable(true);
+          break;
+        }
+      }
+    });
+
     this.physics.add.collider(this.pan, plataformaLayer);
     this.physics.add.collider(this.carne, plataformaLayer);
+    this.physics.add.collider(this.maleza, plataformaLayer);
 
     this.physics.add.collider(
       this.jugador,
@@ -122,6 +141,13 @@ export default class Nivel2 extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(
+      this.jugador,
+      this.maleza,
+      this.perderVida,
+      null,
+      this
+    );
     //temporizador
     this.time.addEvent({
       delay: 1000,
@@ -160,17 +186,61 @@ export default class Nivel2 extends Phaser.Scene {
 
     //camara
     this.cameras.main.startFollow(this.jugador);
-
     //limites
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
     //para que la camara no se vaya fuera del mapa
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    //grupo almacenar los sprites de los corazones
+    this.corazones = this.add.group();
+
+    // Obtiene las dimensiones de la pantalla
+    const { width, height } = this.sys.game.canvas;
+
+    // Posición del extremo derecho superior
+    const posX = width - 505;
+    const posY = 70;
+
+    // Ajusta la posición de los corazones al extremo derecho superior
+    const separacionX = 200; // Separación horizontal entre los corazones
+    const separacionY = 0; // Separación vertical entre los corazones
+
+    this.corazones.children.iterate((corazon, index) => {
+      corazon.x = posX - index * separacionX;
+      corazon.y = posY + index * separacionY;
+    });
+
+    // Número total de corazones a mostrar
+    const totalCorazones = 3;
+
+    // Crea los sprites de los corazones y añáde al grupo
+    for (let i = 0; i < totalCorazones; i++) {
+      const corazon = this.corazones.create(posX + i * 40, posY, "corazon");
+      corazon.setScrollFactor(0); // Fija los corazones para que no se muevan con la cámara
+      corazon.setOrigin(1, 0); // Ajusta el origen del sprite para alinearlos correctamente
+      corazon.x -= i * (corazon.displayWidth + 45); // Ajusta la posición en el eje x con un espacio entre ellos
+    }
 
     this.recolectable = this.sound.add("recolectado");
   }
 
   update() {
+    //inicia escena de juego superado
+    if (this.juegoSuperado) {
+      //llama a funcion para calcular el puntaje
+      this.calcularPuntaje();
+
+      //inicio de escena
+      this.scene.start("nivelSuperado", {
+        puntajeFinal: this.puntajeFinal, //traspaso de data del puntaje
+      });
+    }
+
+    //inicia escena de juego perdido
+    if (this.juegoPerdido) {
+      this.scene.start("nivelPerdido");
+    }
+
     //movimiento de personaje
 
     if (this.cursors.left.isDown) {
@@ -246,5 +316,41 @@ export default class Nivel2 extends Phaser.Scene {
         //condicion perder si timer llega a 0
         this.juegoPerdido = true;
       }
+  }
+
+  perderVida() {
+    if (this.jugador.body.blocked.left) {
+      this.jugador.x += 150;
+      console.log("choque izquierda");
+      this.jugador.body.setVelocityX(200);
+      this.jugador.anims.play("damageLeft");
+    } else if (this.jugador.body.blocked.right) {
+      this.jugador.x -= 150;
+      console.log("choque derecha");
+      this.jugador.body.setVelocityX(-200);
+      this.jugador.anims.play("damageRight");
+    }
+
+    // restar una vida al jugador
+    this.vidas--;
+
+    console.log(this.vidas);
+
+    // cambiar el sprite del corazón a uno gris
+    const corazon = this.corazones.getChildren()[this.vidas];
+    corazon.setTexture("corazonGris");
+
+    if (this.vidas <= 0) {
+      // si no quedan vidas, el juego se pierde
+      this.juegoPerdido = true;
+    }
+  }
+
+  calcularPuntaje() {
+    const puntajeElementos = (this.cantidadHarina + this.cantidadMaiz) * 100;
+    const puntajeVidas = this.vidas * 500;
+    const puntajeTiempo = this.temporizador * 10;
+
+    this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
 }
