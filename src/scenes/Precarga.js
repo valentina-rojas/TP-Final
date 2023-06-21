@@ -54,6 +54,11 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("maleza", "./public/assets/images/nivel2/maleza.png");
 
 
+    this.load.image("inicio1", "./public/assets/images/cinematicas/cinematica inicio1.png");
+    this.load.image("inicio2", "./public/assets/images/cinematicas/cinematica inicio2.png");
+    this.load.image("inicio3", "./public/assets/images/cinematicas/cinematica inicio3.png");
+    this.load.image("inicio4", "./public/assets/images/cinematicas/cinematica inicio4.png");
+
     this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");
 
     this.load.spritesheet("enemigo", "./public/assets/images/enemigo.png", {
@@ -174,7 +179,7 @@ export default class Precarga extends Phaser.Scene {
 
 
     // init scene juego
-    this.scene.start("nivel2");
+    this.scene.start("inicio");
   }
 
   update() {}

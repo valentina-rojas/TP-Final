@@ -18,7 +18,9 @@ export default class NivelSuperado extends Phaser.Scene {
       "Puntaje " + this.puntajeFinal,
       { fontSize: "100px", fill: "#FFFFFF" }
     );
+
+   
+  }
   }
 
-  update() {}
-}
+

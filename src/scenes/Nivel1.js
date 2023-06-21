@@ -379,7 +379,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
     //console.log(this.temporizador);
 
-    if (this.jugador.body)
+
       if (this.temporizador <= 0) {
         //condicion perder si timer llega a 0
         this.juegoPerdido = true;

@@ -21,7 +21,9 @@ preloaad (){
   //Botón para la escena de ayuda
     const helpButton = this.add.sprite(1350, 1000, "ayuda").setInteractive();
     helpButton.on("pointerup", () => {
-      this.scene.start("ayuda");
+      this.scene.pause("menu")
+      this.scene.launch("ayuda");
+
     });
    
   }
