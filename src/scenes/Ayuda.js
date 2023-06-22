@@ -11,15 +11,25 @@ export default class Ayuda extends Phaser.Scene {
 
   create() {
     this.add.image( 1333,1000,"fondoPausa");
-    
-
+    this.add.image( 1333,1000,"instrucciones");
+   
     //botón para volver al menu
-    const Button = this.add.image(1350, 1000, "volver").setInteractive();
+    const volverBoton = this.add.image(1815, 1350, "flecha").setInteractive();
 
-    Button.on("pointerup", () => {
+    volverBoton.on("pointerup", () => {
       this.scene.start("menu");
     });
+
+    volverBoton.on("pointerover", () => {
+      volverBoton.setTexture("flechaPresionado");
+    })
+
+    volverBoton.on("pointerout", () => {
+      volverBoton.setTexture("flecha");
+    })
   }
+
+
 
   update() {}
 }

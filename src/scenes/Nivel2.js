@@ -19,6 +19,8 @@ export default class Nivel2 extends Phaser.Scene {
   preload() {}
 
   create() {
+    const nivelActual = "nivel2";
+
     const map = this.make.tilemap({ key: "map2" });
 
     const capaCielo = map.addTilesetImage("cielo", "cielo2");
@@ -156,33 +158,52 @@ export default class Nivel2 extends Phaser.Scene {
       loop: true,
     });
 
+    this.add.image(366,110, "reloj").setScrollFactor(0);
+    this.add.image(470,110, "carne").setScale(0.5).setScrollFactor(0);
+    this.add.image(250,110, "pan").setScale(0.5).setScrollFactor(0);
+
     //texto que muestra el temporizador
-    this.temporizadorTexto = this.add
-      .text(15, 150, "Tiempo: " + this.temporizador, {
-        fontSize: "80px",
-        fill: "#ffffff",
-        fontFamily: "arial",
+    this.temporizadorTexto = this.add.text(
+      77,
+      80,
+      this.temporizador,
+      {
+        fontSize: "60px",
+        fill: "#000",
+        fontFamily: "cursive",
         fontWeight: "bold",
+      }
+    ).setScrollFactor(0);;
+
+    this.cantidadPanTexto =this.add.text(300, 80, "0/5", {
+      fontSize: "50px",
+      fill: "#000",
+      fontFamily: "cursive",
+      fontWeight: "bold",
+    }).setScrollFactor(0);;
+
+    this.cantidadCarneTexto = this.add.text(520, 80, "0/6", {
+      fontSize: "50px",
+      fill: "#000",
+      fontFamily: "cursive",
+      fontWeight: "bold",
+    }).setScrollFactor(0);;
+
+    //botón para la escena de pausa
+    const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
+    pausaBoton
+      .on("pointerup", () => {
+        this.scene.pause("nivel2");
+        this.scene.launch("pausa", { nivelActual: nivelActual });
+      })
+      .on("pointerover", () => {
+        pausaBoton.setTexture("ajustesPresionado");
+      })
+      .on("pointerout", () => {
+        pausaBoton.setTexture("ajustes");
       })
       .setScrollFactor(0);
 
-    this.cantidadPanTexto = this.add
-      .text(15, 15, "P: 0", {
-        fontSize: "80px",
-        fill: "#FFFFFF",
-        fontFamily: "arial",
-        fontWeight: "bold",
-      })
-      .setScrollFactor(0);
-
-    this.cantidadCarneTexto = this.add
-      .text(15, 80, "C: 0", {
-        fontSize: "80px",
-        fill: "#FFFFFF",
-        fontFamily: "arial",
-        fontWeight: "bold",
-      })
-      .setScrollFactor(0);
 
     //camara
     this.cameras.main.startFollow(this.jugador);
@@ -290,7 +311,7 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cantidadPan++;
 
-    this.cantidadPanTexto.setText("H: " + this.cantidadPan);
+    this.cantidadPanTexto.setText( this.cantidadPan + "/5");
   }
 
   recolectarCarne(jugador, carne) {
@@ -303,12 +324,12 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cantidadCarne++;
 
-    this.cantidadCarneTexto.setText("H: " + this.cantidadCarne);
+    this.cantidadCarneTexto.setText( this.cantidadCarne + "/6");
   }
 
   temporizadorDescendente() {
     this.temporizador = this.temporizador - 1;
-    this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
+    this.temporizadorTexto.setText( + this.temporizador);
     //console.log(this.temporizador);
 
     if (this.jugador.body)

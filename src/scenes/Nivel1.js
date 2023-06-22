@@ -16,11 +16,15 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.juegoSuperado = false;
     this.juegoPerdido = false;
+
+   
   }
 
   preload() {}
 
   create() {
+    const nivelActual = "nivel1";
+    
     const map = this.make.tilemap({ key: "map" });
 
     const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
@@ -201,39 +205,49 @@ export default class Nivel1 extends Phaser.Scene {
       loop: true,
     });
 
+
+    this.add.image(366,110, "reloj").setScrollFactor(0);
+    this.add.image(470,110, "maizIcono").setScale(0.7).setScrollFactor(0);
+    this.add.image(250,110, "harinaIcono").setScale(0.7).setScrollFactor(0);
     //texto que muestra el temporizador
     this.temporizadorTexto = this.add.text(
-      15,
-      150,
-      "Tiempo: " + this.temporizador,
+      77,
+      80,
+      this.temporizador,
       {
-        fontSize: "80px",
-        fill: "#ffffff",
-        fontFamily: "arial",
+        fontSize: "60px",
+        fill: "#000",
+        fontFamily: "cursive",
         fontWeight: "bold",
       }
     );
 
-    this.cantidadHarinaTexto = this.add.text(15, 15, "H: 0", {
-      fontSize: "80px",
-      fill: "#FFFFFF",
-      fontFamily: "arial",
+    this.cantidadHarinaTexto = this.add.text(300, 80, "0/5", {
+      fontSize: "50px",
+      fill: "#000",
+      fontFamily: "cursive",
       fontWeight: "bold",
     });
 
-    this.cantidadMaizTexto = this.add.text(15, 80, "M: 0", {
-      fontSize: "80px",
-      fill: "#FFFFFF",
-      fontFamily: "arial",
+    this.cantidadMaizTexto = this.add.text(520, 80, "0/6", {
+      fontSize: "50px",
+      fill: "#000",
+      fontFamily: "cursive",
       fontWeight: "bold",
     });
 
     //botón para la escena de pausa
-    const stopButton = this.add.sprite(2500, 110, "ajustes").setInteractive();
-    stopButton
+    const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
+    pausaBoton
       .on("pointerup", () => {
         this.scene.pause("nivel1");
-        this.scene.launch("pausa");
+        this.scene.launch("pausa", { nivelActual: nivelActual });
+      })
+      .on("pointerover", () => {
+        pausaBoton.setTexture("ajustesPresionado");
+      })
+      .on("pointerout", () => {
+        pausaBoton.setTexture("ajustes");
       })
       .setScrollFactor(0);
 
@@ -358,7 +372,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cantidadHarina++;
 
-    this.cantidadHarinaTexto.setText("H: " + this.cantidadHarina);
+    this.cantidadHarinaTexto.setText( this.cantidadHarina + "/5");
   }
 
   recolectarMaiz(jugador, maiz) {
@@ -371,12 +385,12 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cantidadMaiz++;
 
-    this.cantidadMaizTexto.setText("H: " + this.cantidadMaiz);
+    this.cantidadMaizTexto.setText( this.cantidadMaiz + "/6");
   }
 
   temporizadorDescendente() {
     this.temporizador = this.temporizador - 1;
-    this.temporizadorTexto.setText("Tiempo: " + this.temporizador);
+    this.temporizadorTexto.setText( this.temporizador);
     //console.log(this.temporizador);
 
 

@@ -20,15 +20,13 @@ export default class Precarga extends Phaser.Scene {
 
     this.load.image("harina", "./public/assets/images/harina.png");
     this.load.image("maiz", "./public/assets/images/choclo.png");
+    this.load.image("harinaIcono", "./public/assets/images/harinaIcono.png");
+    this.load.image("maizIcono", "./public/assets/images/chocloIcono.png");
     this.load.image("cactus", "./public/assets/images/cactus.png");
-    this.load.image("jugar", "./public/assets/images/jugar.png");
-    this.load.image("ayuda", "./public/assets/images/ayuda.png");
-    this.load.image("volver", "./public/assets/images/volver.png");
-    this.load.image("ajustes", "./public/assets/images/ajustes.png");
-    this.load.image("reanudar", "./public/assets/images/reanudar.png");
+    this.load.image("reloj", "./public/assets/images/reloj.png");
     this.load.image("corazon", "./public/assets/images/corazon.png");
     this.load.image("corazonGris", "./public/assets/images/corazongris.png");
-    this.load.image("fondoPausa", "./public/assets/images/fondoPausa.png");
+   
     this.load.image("nube", "./public/assets/images/nube.png");
     this.load.image("cielo", "./public/assets/images/cielo.png");
     this.load.image("montañas", "./public/assets/images/montañas.png");
@@ -53,11 +51,35 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("carne", "./public/assets/images/nivel2/carne.png");
     this.load.image("maleza", "./public/assets/images/nivel2/maleza.png");
 
-
+    this.load.image("jugar", "./public/assets/images/jugar.png");
+    this.load.image("ayuda", "./public/assets/images/ayuda.png");
+    this.load.image("volver", "./public/assets/images/volver.png");
+    this.load.image("ajustes", "./public/assets/images/ajustes.png");
+    this.load.image("ajustesPresionado", "./public/assets/images/ajustesPresionado.png");
+    this.load.image("reanudar", "./public/assets/images/reanudar.png");
+    this.load.image("fondoPausa", "./public/assets/images/fondoPausa.png");
+    this.load.image("instrucciones", "./public/assets/images/instrucciones.png");
+    this.load.image("cerrarBoton", "./public/assets/images/cerrarBoton.png");
+    this.load.image("cerrarBotonPresionado", "./public/assets/images/cerrarBotonPresionado.png");
+    this.load.image("flecha", "./public/assets/images/flecha.png");
+    this.load.image("flechaPresionado", "./public/assets/images/flechaPresionado.png");
+ 
     this.load.image("inicio1", "./public/assets/images/cinematicas/cinematica inicio1.png");
     this.load.image("inicio2", "./public/assets/images/cinematicas/cinematica inicio2.png");
     this.load.image("inicio3", "./public/assets/images/cinematicas/cinematica inicio3.png");
     this.load.image("inicio4", "./public/assets/images/cinematicas/cinematica inicio4.png");
+    
+
+
+    this.load.image("juegoPausado", "./public/assets/images/juegoPausado.png")
+    this.load.image("botonJugar", "./public/assets/images/botonJugar.png")
+    this.load.image("botonJugarPresionado", "./public/assets/images/botonJugarPresionado.png")
+    this.load.image("botonMenu", "./public/assets/images/botonMenu.png")
+    this.load.image("botonMenuPresionado", "./public/assets/images/botonMenuPresionado.png")
+    this.load.image("botonReintentar", "./public/assets/images/botonReintentar.png")
+    this.load.image("botonReintentarPresionado", "./public/assets/images/botonReintentarPresionado.png")
+
+
 
     this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");
 
@@ -179,7 +201,7 @@ export default class Precarga extends Phaser.Scene {
 
 
     // init scene juego
-    this.scene.start("inicio");
+    this.scene.start("ayuda");
   }
 
   update() {}
