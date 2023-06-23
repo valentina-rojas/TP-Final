@@ -78,6 +78,10 @@ export default class Nivel2 extends Phaser.Scene {
     this.jugador.setBounce(0.1);
     this.jugador.setCollideWorldBounds(true);
 
+    spawnPoint = map.findObject("objetos", (obj) => obj.name === "salida");
+    console.log("spawn point salida ", spawnPoint);
+    this.salida = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "salida");
+
     this.cursors = this.input.keyboard.createCursorKeys();
 
     // grupo vacío del elemento pan
@@ -123,6 +127,7 @@ export default class Nivel2 extends Phaser.Scene {
       }
     });
 
+    this.physics.add.collider(this.salida, plataformaLayer);
     this.physics.add.collider(this.pan, plataformaLayer);
     this.physics.add.collider(this.carne, plataformaLayer);
     this.physics.add.collider(this.maleza, plataformaLayer);
@@ -147,6 +152,15 @@ export default class Nivel2 extends Phaser.Scene {
       this.jugador,
       this.maleza,
       this.perderVida,
+      null,
+      this
+    );
+
+    //overlap entre jugador y salida
+    this.physics.add.overlap(
+      this.jugador,
+      this.salida,
+      this.verificarRecolectables,
       null,
       this
     );
@@ -253,7 +267,8 @@ export default class Nivel2 extends Phaser.Scene {
 
       //inicio de escena
       this.scene.start("nivelSuperado", {
-        puntajeFinal: this.puntajeFinal, //traspaso de data del puntaje
+        puntajeFinal: this.puntajeFinal,
+        nivelActual: "nivel2" //traspaso de data del puntaje
       });
     }
 
@@ -264,41 +279,39 @@ export default class Nivel2 extends Phaser.Scene {
 
     //movimiento de personaje
 
-    if (this.cursors.left.isDown) {
-      this.jugador.setVelocityX(-600);
-      if (this.jugador.body.blocked.down) {
-        this.jugador.anims.play("left", true);
-      } else {
-        this.jugador.anims.play("jumpLeft", true);
-      }
-    } else if (this.cursors.right.isDown) {
-      this.jugador.setVelocityX(600);
-      if (this.jugador.body.blocked.down) {
-        this.jugador.anims.play("right", true);
-      } else {
-        this.jugador.anims.play("jumpRight", true);
-      }
-    } else {
-      this.jugador.setVelocityX(0);
-      if (this.jugador.body.blocked.down) {
-        this.jugador.anims.play("turn");
-      } else {
-        if (this.jugador.body.velocity.x > 0) {
-          this.jugador.anims.play("jumpRight", true);
-        } else if (this.jugador.body.velocity.x < 0) {
-          this.jugador.anims.play("jumpLeft", true);
-        }
-      }
-    }
+  //movimiento de personaje
 
-    if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-900);
-      if (this.jugador.body.velocity.x > 0) {
-        this.jugador.anims.play("jumpRight");
-      } else if (this.jugador.body.velocity.x < 0) {
-        this.jugador.anims.play("jumpLeft");
-      }
+  if (this.cursors.left.isDown) {
+    this.jugador.setVelocityX(-600);
+    if (this.jugador.body.blocked.down) {
+      this.jugador.anims.play("left", true);
+    } else {
+      this.jugador.anims.play("jumpLeft", true);
     }
+  } else if (this.cursors.right.isDown) {
+    this.jugador.setVelocityX(600);
+    if (this.jugador.body.blocked.down) {
+      this.jugador.anims.play("right", true);
+    } else {
+      this.jugador.anims.play("jumpRight", true);
+    }
+  } else {
+    this.jugador.setVelocityX(0);
+    if (this.jugador.body.blocked.down) {
+      this.jugador.anims.play("turn");
+    } 
+  }
+
+  if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
+    this.jugador.setVelocityY(-900);
+    if (this.jugador.body.velocity.x > 0) {
+      this.jugador.anims.play("jumpRight");
+    } else if (this.jugador.body.velocity.x < 0) {
+      this.jugador.anims.play("jumpLeft");
+    }
+  }
+
+ 
   }
 
   recolectarPan(jugador, pan) {
@@ -339,19 +352,25 @@ export default class Nivel2 extends Phaser.Scene {
       }
   }
 
+  verificarRecolectables() {
+    if (this.cantidadPan >= 1 && this.cantidadCarne >= 1) {
+      this.juegoSuperado = true;
+    }
+  }
+
   perderVida() {
-    if (this.jugador.body.blocked.left) {
+   
+    if (this.jugador.body.touching.left) {
       this.jugador.x += 150;
       console.log("choque izquierda");
       this.jugador.body.setVelocityX(200);
       this.jugador.anims.play("damageLeft");
-    } else if (this.jugador.body.blocked.right) {
+    } else if (this.jugador.body.touching.right) {
       this.jugador.x -= 150;
       console.log("choque derecha");
       this.jugador.body.setVelocityX(-200);
       this.jugador.anims.play("damageRight");
     }
-
     // restar una vida al jugador
     this.vidas--;
 
@@ -374,4 +393,5 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
+  
 }

@@ -17,7 +17,6 @@ export default class Nivel1 extends Phaser.Scene {
     this.juegoSuperado = false;
     this.juegoPerdido = false;
 
-   
   }
 
   preload() {}
@@ -88,6 +87,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+
     // grupo vacío del elemento harina
     this.harina = this.physics.add.group();
 
@@ -102,6 +102,7 @@ export default class Nivel1 extends Phaser.Scene {
         }
       }
     });
+
 
     // grupo de maiz
     this.maiz = this.physics.add.group();
@@ -209,6 +210,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.add.image(366,110, "reloj").setScrollFactor(0);
     this.add.image(470,110, "maizIcono").setScale(0.7).setScrollFactor(0);
     this.add.image(250,110, "harinaIcono").setScale(0.7).setScrollFactor(0);
+
     //texto que muestra el temporizador
     this.temporizadorTexto = this.add.text(
       77,
@@ -314,7 +316,8 @@ export default class Nivel1 extends Phaser.Scene {
 
       //inicio de escena
       this.scene.start("nivelSuperado", {
-        puntajeFinal: this.puntajeFinal, //traspaso de data del puntaje
+        puntajeFinal: this.puntajeFinal,
+        nivelActual: "nivel1" //traspaso de data del puntaje
       });
     }
 
