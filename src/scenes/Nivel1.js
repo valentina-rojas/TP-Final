@@ -323,7 +323,9 @@ export default class Nivel1 extends Phaser.Scene {
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
-      this.scene.start("nivelPerdido");
+      this.scene.start("nivelPerdido", {
+        nivelActual: "nivel1" //traspaso de data 
+      });
     }
 
     //movimiento de personaje
@@ -346,13 +348,7 @@ export default class Nivel1 extends Phaser.Scene {
       this.jugador.setVelocityX(0);
       if (this.jugador.body.blocked.down) {
         this.jugador.anims.play("turn");
-      } else {
-        if (this.jugador.body.velocity.x > 0) {
-          this.jugador.anims.play("jumpRight", true);
-        } else if (this.jugador.body.velocity.x < 0) {
-          this.jugador.anims.play("jumpLeft", true);
-        }
-      }
+      } 
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {

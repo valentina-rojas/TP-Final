@@ -268,19 +268,18 @@ export default class Nivel2 extends Phaser.Scene {
       //inicio de escena
       this.scene.start("nivelSuperado", {
         puntajeFinal: this.puntajeFinal,
-        nivelActual: "nivel2" //traspaso de data del puntaje
+        nivelActual: "nivel2" //traspaso de data 
       });
     }
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
-      this.scene.start("nivelPerdido");
+      this.scene.start("nivelPerdido", {
+        nivelActual: "nivel2" //traspaso de data
+      });
     }
 
     //movimiento de personaje
-
-  //movimiento de personaje
-
   if (this.cursors.left.isDown) {
     this.jugador.setVelocityX(-600);
     if (this.jugador.body.blocked.down) {
@@ -360,16 +359,16 @@ export default class Nivel2 extends Phaser.Scene {
 
   perderVida() {
    
-    if (this.jugador.body.touching.left) {
+    if (this.jugador.body.blocked.left) {
       this.jugador.x += 150;
       console.log("choque izquierda");
       this.jugador.body.setVelocityX(200);
-      this.jugador.anims.play("damageLeft");
-    } else if (this.jugador.body.touching.right) {
+      this.jugador.anims.play("damageLeft", true); 
+    } else if (this.jugador.body.blocked.right) {
       this.jugador.x -= 150;
       console.log("choque derecha");
       this.jugador.body.setVelocityX(-200);
-      this.jugador.anims.play("damageRight");
+      this.jugador.anims.play("damageRight", true);
     }
     // restar una vida al jugador
     this.vidas--;
