@@ -10,6 +10,7 @@ export default class Precarga extends Phaser.Scene {
   preload() {
     this.load.tilemapTiledJSON("map", "./public/assets/tilemaps/nivel1.json");
     this.load.tilemapTiledJSON("map2", "./public/assets/tilemaps/nivel2.json");
+    this.load.tilemapTiledJSON("map3", "./public/assets/tilemaps/nivel3.json");
 
     this.load.image("tilesFondo", "./public/assets/images/fondo.png");
     this.load.image(
@@ -50,6 +51,17 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("pan", "./public/assets/images/nivel2/pan.png");
     this.load.image("carne", "./public/assets/images/nivel2/carne.png");
     this.load.image("maleza", "./public/assets/images/nivel2/maleza.png");
+
+    
+
+    this.load.image("cielo3", "./public/assets/images/nivel3/cielo.png");
+    this.load.image("aguaAtras", "./public/assets/images/nivel3/aguaAtras.png");
+    this.load.image("aguaFrente", "./public/assets/images/nivel3/aguaFrente.png");
+    this.load.image("aguaMedia", "./public/assets/images/nivel3/aguaMedia.png");
+    this.load.image("hielosChicos", "./public/assets/images/nivel3/hielosChicos.png");
+    this.load.image("hielosGrandes", "./public/assets/images/nivel3/hielosGrandes.png");
+    this.load.image("plataformas3", "./public/assets/images/nivel3/plataformas.png");
+
 
     this.load.image("jugar", "./public/assets/images/jugar.png");
     this.load.image("ayuda", "./public/assets/images/ayuda.png");
@@ -214,11 +226,8 @@ export default class Precarga extends Phaser.Scene {
       hideOnComplete: true,
     });
 
-
-
-
     // init scene juego
-    this.scene.start("inicio");
+    this.scene.start("nivel3");
   }
 
   update() {}
