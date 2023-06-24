@@ -54,7 +54,13 @@ export default class Nivel3 extends Phaser.Scene {
     const glaciares3Layer = map
       .createLayer("glaciers3", capaGlaciares3, 0, 0)
       .setOrigin(0, 1)
-      .setScrollFactor(1);
+      .setScrollFactor(0.95);
+
+      const capaAgua3 = map.addTilesetImage("aguaFrente", "aguaFrente");
+      const Agua3Layer = map
+        .createLayer("water3", capaAgua3, 0, 0)
+        .setOrigin(0, 1)
+        .setScrollFactor(1.2);
 
     const capaPlataformas = map.addTilesetImage("plataformas", "plataformas3");
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
