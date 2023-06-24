@@ -41,8 +41,8 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("arbustos1", "./public/assets/images/nivel2/arbustos1.png");
     this.load.image("arbustos2", "./public/assets/images/nivel2/arbustos2.png");
     this.load.image("edificios", "./public/assets/images/nivel2/edificios.png");
-    this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png");
-    this.load.image("suelo2", "./public/assets/images/nivel2/suelo.png");
+    this.load.image("suelo 1", "./public/assets/images/nivel2/suelo 1.png");
+    this.load.image("suelo2", "./public/assets/images/nivel2/suelo 2.png");
     this.load.image(
       "plataformas2",
       "./public/assets/images/nivel2/plataformas.png"
@@ -68,8 +68,10 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("inicio2", "./public/assets/images/cinematicas/cinematica inicio2.png");
     this.load.image("inicio3", "./public/assets/images/cinematicas/cinematica inicio3.png");
     this.load.image("inicio4", "./public/assets/images/cinematicas/cinematica inicio4.png");
-    
-
+    this.load.image("saltar", "./public/assets/images/cinematicas/saltar.png");
+    this.load.image("saltarPresionado", "./public/assets/images/cinematicas/saltarPresionado.png");
+    this.load.image("siguiente", "./public/assets/images/cinematicas/siguiente.png");
+    this.load.image("siguientePresionado", "./public/assets/images/cinematicas/siguientePresionado.png");
 
     this.load.image("juegoPausado", "./public/assets/images/juegoPausado.png")
     this.load.image("botonJugar", "./public/assets/images/botonJugar.png")
@@ -88,6 +90,13 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("papel", "./public/assets/images/papel.png" )
     this.load.image("leyendaSuperado", "./public/assets/images/leyendaSuperado.png" )
     this.load.image("leyendaPerdiste", "./public/assets/images/leyendaPerdiste.png" )
+
+    this.load.image("logo", "./public/assets/images/logo.png" )
+    this.load.image("fondoMenu", "./public/assets/images/fondoMenu.png" )
+    this.load.image("logoBoton", "./public/assets/images/logoBoton.png" )
+    this.load.image("logoBotonPresionado", "./public/assets/images/logoBotonPresionado.png" )
+    this.load.image("botonAyuda", "./public/assets/images/botonAyuda.png" )
+    this.load.image("botonAyudaPresionado", "./public/assets/images/botonAyudaPresionado.png" )
 
     this.load.audio("recolectado", "./public/assets/audio/pickup.mp3");
 
@@ -160,7 +169,7 @@ export default class Precarga extends Phaser.Scene {
         start: 16,
         end: 18,
       }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: 0,
     });
 
@@ -170,7 +179,7 @@ export default class Precarga extends Phaser.Scene {
         start: 2,
         end: 0,
       }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: 0,
     });
 
@@ -209,7 +218,7 @@ export default class Precarga extends Phaser.Scene {
 
 
     // init scene juego
-    this.scene.start("nivel2");
+    this.scene.start("inicio");
   }
 
   update() {}

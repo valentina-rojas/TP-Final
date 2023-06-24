@@ -25,17 +25,29 @@ export default class Inicio extends Phaser.Scene {
 
     // botón "Siguiente"
     const siguienteBoton = this.add
-      .text(10, 10, "Siguiente", { fontSize: 100, fill: "#ffffff" })
+      .image(2450, 1750, "siguiente", { fontSize: 100, fill: "#ffffff" })
       .setInteractive();
+
     siguienteBoton.on("pointerup", () => this.mostrarSiguienteImagen());
+    siguienteBoton.on("pointerover", () => {
+      siguienteBoton.setTexture("siguientePresionado");
+    });
+    siguienteBoton.on("pointerout", () => {
+      siguienteBoton.setTexture("siguiente");
+    });
 
     // botón "Saltar"
     const saltarBoton = this.add
-      .text(10, 100, "Saltar", { fontSize: 100, fill: "#ffffff" })
+      .image(2500, 1900,  "saltar", { fontSize: 100, fill: "#ffffff" })
       .setInteractive();
     saltarBoton.on("pointerup", () => this.scene.start("menu"));
+    saltarBoton.on("pointerover", () => {
+      saltarBoton.setTexture("saltarPresionado");
+    });
+    saltarBoton.on("pointerout", () => {
+      saltarBoton.setTexture("saltar");
+    });
   }
-
 
   mostrarSiguienteImagen() {
     this.imagenActual++;

@@ -8,22 +8,32 @@ preloaad (){
 
 }
   create() {
-    this.add.image(400, 1000, "tilesFondo");
-
+    this.add.image(1333, 1000, "fondoMenu");
+    this.add.image(1950, 1050, "logo");
    
     // Botón para empezar el juego
-    const playButton = this.add.sprite(1350, 800, "jugar").setInteractive();
-    playButton.on("pointerup", () => {
+    const botonJugar = this.add.sprite(1750, 600, "logoBoton").setInteractive();
+    botonJugar.on("pointerup", () => {
       this.scene.start("nivel1");
     });
-
+    botonJugar.on("pointerover", () => {
+      botonJugar.setTexture("logoBotonPresionado");
+    })
+    botonJugar.on("pointerout", () => {
+      botonJugar.setTexture("logoBoton");
+    });
    
   //Botón para la escena de ayuda
-    const helpButton = this.add.sprite(1350, 1000, "ayuda").setInteractive();
-    helpButton.on("pointerup", () => {
+    const botonAyuda = this.add.sprite(2500, 1800, "botonAyuda").setInteractive();
+    botonAyuda.on("pointerup", () => {
       this.scene.pause("menu")
       this.scene.launch("ayuda");
-
+    });
+    botonAyuda.on("pointerover", () => {
+      botonAyuda.setTexture("botonAyudaPresionado");
+    })
+    botonAyuda.on("pointerout", () => {
+      botonAyuda.setTexture("botonAyuda");
     });
    
   }

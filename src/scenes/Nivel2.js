@@ -310,7 +310,7 @@ export default class Nivel2 extends Phaser.Scene {
     }
   }
 
- 
+
   }
 
   recolectarPan(jugador, pan) {
@@ -358,18 +358,22 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   perderVida() {
-   
+
+      
     if (this.jugador.body.blocked.left) {
       this.jugador.x += 150;
-      console.log("choque izquierda");
+      console.log("choque izquierda");; 
       this.jugador.body.setVelocityX(200);
       this.jugador.anims.play("damageLeft", true); 
     } else if (this.jugador.body.blocked.right) {
       this.jugador.x -= 150;
       console.log("choque derecha");
       this.jugador.body.setVelocityX(-200);
+      this.jugador.anims.stop("right", true); 
       this.jugador.anims.play("damageRight", true);
     }
+   
+    
     // restar una vida al jugador
     this.vidas--;
 
@@ -393,4 +397,7 @@ export default class Nivel2 extends Phaser.Scene {
     this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
   
+
+
+ 
 }
