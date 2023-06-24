@@ -187,7 +187,7 @@ export default class Precarga extends Phaser.Scene {
         start: 16,
         end: 18,
       }),
-      frameRate: 10,
+      frameRate: 7,
       repeat: 0,
     });
 
@@ -253,7 +253,7 @@ export default class Precarga extends Phaser.Scene {
       hideOnComplete: true,
     });
     // init scene juego
-    this.scene.start("nivel3");
+    this.scene.start("nivel2");
   }
 
   update() {}

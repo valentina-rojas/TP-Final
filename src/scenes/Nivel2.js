@@ -172,36 +172,37 @@ export default class Nivel2 extends Phaser.Scene {
       loop: true,
     });
 
-    this.add.image(366,110, "reloj").setScrollFactor(0);
-    this.add.image(470,110, "carne").setScale(0.5).setScrollFactor(0);
-    this.add.image(250,110, "pan").setScale(0.5).setScrollFactor(0);
+    this.add.image(366, 110, "reloj").setScrollFactor(0);
+    this.add.image(470, 110, "carne").setScale(0.5).setScrollFactor(0);
+    this.add.image(250, 110, "pan").setScale(0.5).setScrollFactor(0);
 
     //texto que muestra el temporizador
-    this.temporizadorTexto = this.add.text(
-      77,
-      80,
-      this.temporizador,
-      {
+    this.temporizadorTexto = this.add
+      .text(77, 80, this.temporizador, {
         fontSize: "60px",
         fill: "#000",
         fontFamily: "cursive",
         fontWeight: "bold",
-      }
-    ).setScrollFactor(0);;
+      })
+      .setScrollFactor(0);
 
-    this.cantidadPanTexto =this.add.text(300, 80, "0/5", {
-      fontSize: "50px",
-      fill: "#000",
-      fontFamily: "cursive",
-      fontWeight: "bold",
-    }).setScrollFactor(0);;
+    this.cantidadPanTexto = this.add
+      .text(300, 80, "0/5", {
+        fontSize: "50px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
 
-    this.cantidadCarneTexto = this.add.text(520, 80, "0/6", {
-      fontSize: "50px",
-      fill: "#000",
-      fontFamily: "cursive",
-      fontWeight: "bold",
-    }).setScrollFactor(0);;
+    this.cantidadCarneTexto = this.add
+      .text(520, 80, "0/6", {
+        fontSize: "50px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
 
     //botón para la escena de pausa
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
@@ -217,7 +218,6 @@ export default class Nivel2 extends Phaser.Scene {
         pausaBoton.setTexture("ajustes");
       })
       .setScrollFactor(0);
-
 
     //camara
     this.cameras.main.startFollow(this.jugador);
@@ -268,49 +268,47 @@ export default class Nivel2 extends Phaser.Scene {
       //inicio de escena
       this.scene.start("nivelSuperado", {
         puntajeFinal: this.puntajeFinal,
-        nivelActual: "nivel2" //traspaso de data 
+        nivelActual: "nivel2", //traspaso de data
       });
     }
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
       this.scene.start("nivelPerdido", {
-        nivelActual: "nivel2" //traspaso de data
+        nivelActual: "nivel2", //traspaso de data
       });
     }
 
     //movimiento de personaje
-  if (this.cursors.left.isDown) {
-    this.jugador.setVelocityX(-600);
-    if (this.jugador.body.blocked.down) {
-      this.jugador.anims.play("left", true);
+    if (this.cursors.left.isDown) {
+      this.jugador.setVelocityX(-600);
+      if (this.jugador.body.blocked.down) {
+        this.jugador.anims.play("left", true);
+      } else {
+        this.jugador.anims.play("jumpLeft", true);
+      }
+    } else if (this.cursors.right.isDown) {
+      this.jugador.setVelocityX(600);
+      if (this.jugador.body.blocked.down) {
+        this.jugador.anims.play("right", true);
+      } else {
+        this.jugador.anims.play("jumpRight", true);
+      }
     } else {
-      this.jugador.anims.play("jumpLeft", true);
+      this.jugador.setVelocityX(0);
+      if (this.jugador.body.blocked.down) {
+        this.jugador.anims.play("turn");
+      }
     }
-  } else if (this.cursors.right.isDown) {
-    this.jugador.setVelocityX(600);
-    if (this.jugador.body.blocked.down) {
-      this.jugador.anims.play("right", true);
-    } else {
-      this.jugador.anims.play("jumpRight", true);
+
+    if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
+      this.jugador.setVelocityY(-900);
+      if (this.jugador.body.velocity.x > 0) {
+        this.jugador.anims.play("jumpRight");
+      } else if (this.jugador.body.velocity.x < 0) {
+        this.jugador.anims.play("jumpLeft");
+      }
     }
-  } else {
-    this.jugador.setVelocityX(0);
-    if (this.jugador.body.blocked.down) {
-      this.jugador.anims.play("turn");
-    } 
-  }
-
-  if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-    this.jugador.setVelocityY(-900);
-    if (this.jugador.body.velocity.x > 0) {
-      this.jugador.anims.play("jumpRight");
-    } else if (this.jugador.body.velocity.x < 0) {
-      this.jugador.anims.play("jumpLeft");
-    }
-  }
-
-
   }
 
   recolectarPan(jugador, pan) {
@@ -323,7 +321,7 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cantidadPan++;
 
-    this.cantidadPanTexto.setText( this.cantidadPan + "/5");
+    this.cantidadPanTexto.setText(this.cantidadPan + "/5");
   }
 
   recolectarCarne(jugador, carne) {
@@ -336,12 +334,12 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cantidadCarne++;
 
-    this.cantidadCarneTexto.setText( this.cantidadCarne + "/6");
+    this.cantidadCarneTexto.setText(this.cantidadCarne + "/6");
   }
 
   temporizadorDescendente() {
     this.temporizador = this.temporizador - 1;
-    this.temporizadorTexto.setText( + this.temporizador);
+    this.temporizadorTexto.setText(+this.temporizador);
     //console.log(this.temporizador);
 
     if (this.jugador.body)
@@ -357,27 +355,54 @@ export default class Nivel2 extends Phaser.Scene {
     }
   }
 
-  perderVida() {
-
-
- 
-
-
-      
+  perderVida(jugador) {
     if (this.jugador.body.blocked.left) {
       this.jugador.x += 150;
-      console.log("choque izquierda");; 
+      console.log("choque izquierda");
       this.jugador.body.setVelocityX(200);
-      this.jugador.anims.play("damageLeft", true); 
+
+      // Deshabilitar la interacción del jugador temporalmente
+      this.jugador.disableBody(true, true);
+      // Reproducir la animación de daño del personaje
+      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+      const choqueIzquierda = this.add.sprite(
+        jugador.x,
+        jugador.y,
+        "personaje"
+      );
+      choqueIzquierda.play("damageLeft");
+
+      this.time.delayedCall(1000, () => {
+        choqueIzquierda.destroy();
+      });
     } else if (this.jugador.body.blocked.right) {
       this.jugador.x -= 150;
       console.log("choque derecha");
       this.jugador.body.setVelocityX(-200);
-      this.jugador.anims.stop("right", true); 
-      this.jugador.anims.play("damageRight", true);
+
+      // Deshabilitar la interacción del jugador temporalmente
+      this.jugador.disableBody(true, true);
+      // Reproducir la animación de daño del personaje
+      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+      const choqueDerecha = this.add.sprite(jugador.x, jugador.y, "personaje");
+      choqueDerecha.play("damageRight");
+
+      this.time.delayedCall(1000, () => {
+        choqueDerecha.destroy();
+      });
+    } else if (this.jugador.body.blocked.down) {
+      this.jugador.body.setVelocityY(-400);
     }
-   
-    
+
+    // Establecer un temporizador para restaurar el estado del jugador después de cierto tiempo
+    this.time.delayedCall(1000, () => {
+      // Restaurar el estado del jugador
+      this.jugador.enableBody(true, jugador.x, jugador.y, true, true);
+      this.jugador.setAlpha(1); // Restaurar la opacidad del personaje
+    });
+
     // restar una vida al jugador
     this.vidas--;
 
@@ -400,8 +425,4 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
-  
-
-
- 
 }

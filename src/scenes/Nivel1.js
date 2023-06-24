@@ -16,14 +16,13 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.juegoSuperado = false;
     this.juegoPerdido = false;
-
   }
 
   preload() {}
 
   create() {
     const nivelActual = "nivel1";
-    
+
     const map = this.make.tilemap({ key: "map" });
 
     const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
@@ -87,7 +86,6 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-
     // grupo vacío del elemento harina
     this.harina = this.physics.add.group();
 
@@ -102,7 +100,6 @@ export default class Nivel1 extends Phaser.Scene {
         }
       }
     });
-
 
     // grupo de maiz
     this.maiz = this.physics.add.group();
@@ -158,7 +155,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.physics.add.collider(
       this.jugador,
       this.cactus,
-      this.perderVida,
+      this.colisionCactus,
       null,
       this
     );
@@ -166,7 +163,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.physics.add.collider(
       this.jugador,
       this.enemigo,
-      this.perderVida,
+      this.colisionEnemigo,
       null,
       this
     );
@@ -206,23 +203,17 @@ export default class Nivel1 extends Phaser.Scene {
       loop: true,
     });
 
-
-    this.add.image(366,110, "reloj").setScrollFactor(0);
-    this.add.image(470,110, "maizIcono").setScale(0.7).setScrollFactor(0);
-    this.add.image(250,110, "harinaIcono").setScale(0.7).setScrollFactor(0);
+    this.add.image(366, 110, "reloj").setScrollFactor(0);
+    this.add.image(470, 110, "maizIcono").setScale(0.7).setScrollFactor(0);
+    this.add.image(250, 110, "harinaIcono").setScale(0.7).setScrollFactor(0);
 
     //texto que muestra el temporizador
-    this.temporizadorTexto = this.add.text(
-      77,
-      80,
-      this.temporizador,
-      {
-        fontSize: "60px",
-        fill: "#000",
-        fontFamily: "cursive",
-        fontWeight: "bold",
-      }
-    );
+    this.temporizadorTexto = this.add.text(77, 80, this.temporizador, {
+      fontSize: "60px",
+      fill: "#000",
+      fontFamily: "cursive",
+      fontWeight: "bold",
+    });
 
     this.cantidadHarinaTexto = this.add.text(300, 80, "0/5", {
       fontSize: "50px",
@@ -317,14 +308,14 @@ export default class Nivel1 extends Phaser.Scene {
       //inicio de escena
       this.scene.start("nivelSuperado", {
         puntajeFinal: this.puntajeFinal,
-        nivelActual: "nivel1" //traspaso de data del puntaje
+        nivelActual: "nivel1", //traspaso de data del puntaje
       });
     }
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
       this.scene.start("nivelPerdido", {
-        nivelActual: "nivel1" //traspaso de data 
+        nivelActual: "nivel1", //traspaso de data
       });
     }
 
@@ -348,7 +339,7 @@ export default class Nivel1 extends Phaser.Scene {
       this.jugador.setVelocityX(0);
       if (this.jugador.body.blocked.down) {
         this.jugador.anims.play("turn");
-      } 
+      }
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
@@ -371,7 +362,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cantidadHarina++;
 
-    this.cantidadHarinaTexto.setText( this.cantidadHarina + "/5");
+    this.cantidadHarinaTexto.setText(this.cantidadHarina + "/5");
   }
 
   recolectarMaiz(jugador, maiz) {
@@ -384,19 +375,18 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cantidadMaiz++;
 
-    this.cantidadMaizTexto.setText( this.cantidadMaiz + "/6");
+    this.cantidadMaizTexto.setText(this.cantidadMaiz + "/6");
   }
 
   temporizadorDescendente() {
     this.temporizador = this.temporizador - 1;
-    this.temporizadorTexto.setText( this.temporizador);
+    this.temporizadorTexto.setText(this.temporizador);
     //console.log(this.temporizador);
 
-
-      if (this.temporizador <= 0) {
-        //condicion perder si timer llega a 0
-        this.juegoPerdido = true;
-      }
+    if (this.temporizador <= 0) {
+      //condicion perder si timer llega a 0
+      this.juegoPerdido = true;
+    }
   }
 
   verificarRecolectables() {
@@ -405,19 +395,7 @@ export default class Nivel1 extends Phaser.Scene {
     }
   }
 
-  perderVida() {
-    if (this.jugador.body.blocked.left) {
-      this.jugador.x += 150;
-      console.log("choque izquierda");
-      this.jugador.body.setVelocityX(200);
-      this.jugador.anims.play("damageLeft");
-    } else if (this.jugador.body.blocked.right) {
-      this.jugador.x -= 150;
-      console.log("choque derecha");
-      this.jugador.body.setVelocityX(-200);
-      this.jugador.anims.play("damageRight");
-    }
-
+  perderVida(jugador) {
     // restar una vida al jugador
     this.vidas--;
 
@@ -454,5 +432,107 @@ export default class Nivel1 extends Phaser.Scene {
         enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
       }
     });
+  }
+
+  colisionCactus(jugador, cactus) {
+    if (this.jugador.body.blocked.left) {
+      this.jugador.x += 150;
+      console.log("choque izquierda");
+      this.jugador.body.setVelocityX(200);
+
+      // Deshabilitar la interacción del jugador temporalmente
+      this.jugador.disableBody(true, true);
+      // Reproducir la animación de daño del personaje
+      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+      const choqueIzquierda = this.add.sprite(
+        jugador.x,
+        jugador.y,
+        "personaje"
+      );
+      choqueIzquierda.play("damageLeft");
+
+      this.time.delayedCall(1000, () => {
+        choqueIzquierda.destroy();
+      });
+    } else if (this.jugador.body.blocked.right) {
+      this.jugador.x -= 150;
+      console.log("choque derecha");
+      this.jugador.body.setVelocityX(-200);
+
+      // Deshabilitar la interacción del jugador temporalmente
+      this.jugador.disableBody(true, true);
+      // Reproducir la animación de daño del personaje
+      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+      const choqueDerecha = this.add.sprite(jugador.x, jugador.y, "personaje");
+      choqueDerecha.play("damageRight");
+
+      this.time.delayedCall(1000, () => {
+        choqueDerecha.destroy();
+      });
+    } else if (this.jugador.body.blocked.down) {
+      this.jugador.body.setVelocityY(-400);
+    }
+
+    // Establecer un temporizador para restaurar el estado del jugador después de cierto tiempo
+    this.time.delayedCall(1000, () => {
+      // Restaurar el estado del jugador
+      this.jugador.enableBody(true, jugador.x, jugador.y, true, true);
+      this.jugador.setAlpha(1); // Restaurar la opacidad del personaje
+    });
+
+    this.perderVida();
+  }
+
+  colisionEnemigo(jugador, enemigos) {
+    if (this.jugador.body.touching.left) {
+      this.jugador.x += 150;
+      console.log("choque izquierda");
+      this.jugador.body.setVelocityX(200);
+
+      // Deshabilitar la interacción del jugador temporalmente
+      this.jugador.disableBody(true, true);
+      // Reproducir la animación de daño del personaje
+      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+      const choqueIzquierda = this.add.sprite(
+        jugador.x,
+        jugador.y,
+        "personaje"
+      );
+      choqueIzquierda.play("damageLeft");
+
+      this.time.delayedCall(1000, () => {
+        choqueIzquierda.destroy();
+      });
+    } else if (this.jugador.body.touching.right) {
+      this.jugador.x -= 150;
+      console.log("choque derecha");
+      this.jugador.body.setVelocityX(-200);
+
+      // Deshabilitar la interacción del jugador temporalmente
+      this.jugador.disableBody(true, true);
+      // Reproducir la animación de daño del personaje
+      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+      const choqueDerecha = this.add.sprite(jugador.x, jugador.y, "personaje");
+      choqueDerecha.play("damageRight");
+
+      this.time.delayedCall(1000, () => {
+        choqueDerecha.destroy();
+      });
+    } else if (this.jugador.body.touching.down) {
+      this.jugador.body.setVelocityY(-400);
+    }
+
+    // Establecer un temporizador para restaurar el estado del jugador después de cierto tiempo
+    this.time.delayedCall(1000, () => {
+      // Restaurar el estado del jugador
+      this.jugador.enableBody(true, jugador.x, jugador.y, true, true);
+      this.jugador.setAlpha(1); // Restaurar la opacidad del personaje
+    });
+
+    this.perderVida();
   }
 }
