@@ -61,7 +61,7 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("hielosChicos", "./public/assets/images/nivel3/hielosChicos.png");
     this.load.image("hielosGrandes", "./public/assets/images/nivel3/hielosGrandes.png");
     this.load.image("plataformas3", "./public/assets/images/nivel3/plataformas.png");
-
+    this.load.image("hielos", "./public/assets/images/nivel3/hielos.png");
 
     this.load.image("jugar", "./public/assets/images/jugar.png");
     this.load.image("ayuda", "./public/assets/images/ayuda.png");
@@ -125,6 +125,12 @@ export default class Precarga extends Phaser.Scene {
     this.load.spritesheet("explosion", "./public/assets/images/explosion.png", {
       frameWidth: 150,
       frameHeight: 150,
+    });
+
+    
+    this.load.spritesheet("explosion2", "./public/assets/images/nivel3/explosion.png", {
+      frameWidth: 200,
+      frameHeight: 200,
     });
   }
 
@@ -196,6 +202,16 @@ export default class Precarga extends Phaser.Scene {
     });
 
     this.anims.create({
+      key: "damageUp",
+      frames: this.anims.generateFrameNumbers("personaje", {
+        start: 19,
+        end: 20,
+      }),
+      frameRate: 10,
+      repeat: 0,
+    });
+
+    this.anims.create({
       key: "enemiesLeft",
       frames: this.anims.generateFrameNumbers("enemigo", {
         start: 0,
@@ -226,6 +242,16 @@ export default class Precarga extends Phaser.Scene {
       hideOnComplete: true,
     });
 
+    this.anims.create({
+      key: "explosion2",
+      frames: this.anims.generateFrameNumbers("explosion2", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 10,
+      repeat: 0,
+      hideOnComplete: true,
+    });
     // init scene juego
     this.scene.start("nivel3");
   }

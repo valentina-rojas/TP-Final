@@ -359,6 +359,10 @@ export default class Nivel2 extends Phaser.Scene {
 
   perderVida() {
 
+
+ 
+
+
       
     if (this.jugador.body.blocked.left) {
       this.jugador.x += 150;

@@ -5,7 +5,14 @@ export default class Nivel3 extends Phaser.Scene {
     super("nivel3");
   }
 
-  init() {}
+  init() {
+    this.temporizador = 90;
+    this.puntajeFinal = 0;
+    this.vidas = 3;
+
+    this.juegoSuperado = false;
+    this.juegoPerdido = false;
+  }
 
   preload() {}
 
@@ -56,11 +63,11 @@ export default class Nivel3 extends Phaser.Scene {
       .setOrigin(0, 1)
       .setScrollFactor(0.95);
 
-      const capaAgua3 = map.addTilesetImage("aguaFrente", "aguaFrente");
-      const Agua3Layer = map
-        .createLayer("water3", capaAgua3, 0, 0)
-        .setOrigin(0, 1)
-        .setScrollFactor(1.2);
+    const capaAgua3 = map.addTilesetImage("aguaFrente", "aguaFrente");
+    const Agua3Layer = map
+      .createLayer("water3", capaAgua3, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(1.2);
 
     const capaPlataformas = map.addTilesetImage("plataformas", "plataformas3");
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
@@ -89,9 +96,98 @@ export default class Nivel3 extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     //para que la camara no se vaya fuera del mapa
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    this.hielos = this.physics.add.group();
+
+    this.physics.add.collider(
+      this.hielos,
+      plataformaLayer,
+      this.colisionHielos,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      this.jugador,
+      this.hielos,
+      this.perderVida,
+      null,
+      this
+    );
+
+    this.time.addEvent({
+      delay: 2000,
+      callback: this.caidaHielos,
+      callbackScope: this,
+      loop: true,
+    });
+
+    //botón para la escena de pausa
+    const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
+    pausaBoton
+      .on("pointerup", () => {
+        this.scene.pause("nivel3");
+        this.scene.launch("pausa", { nivelActual: nivelActual });
+      })
+      .on("pointerover", () => {
+        pausaBoton.setTexture("ajustesPresionado");
+      })
+      .on("pointerout", () => {
+        pausaBoton.setTexture("ajustes");
+      })
+      .setScrollFactor(0);
+
+    //grupo almacenar los sprites de los corazones
+    this.corazones = this.add.group();
+
+    // Obtiene las dimensiones de la pantalla
+    const { width, height } = this.sys.game.canvas;
+
+    // Posición del extremo derecho superior
+    const posX = width - 505;
+    const posY = 70;
+
+    // Ajusta la posición de los corazones al extremo derecho superior
+    const separacionX = 200; // Separación horizontal entre los corazones
+    const separacionY = 0; // Separación vertical entre los corazones
+
+    this.corazones.children.iterate((corazon, index) => {
+      corazon.x = posX - index * separacionX;
+      corazon.y = posY + index * separacionY;
+    });
+
+    // Número total de corazones a mostrar
+    const totalCorazones = 3;
+
+    // Crea los sprites de los corazones y añáde al grupo
+    for (let i = 0; i < totalCorazones; i++) {
+      const corazon = this.corazones.create(posX + i * 40, posY, "corazon");
+      corazon.setScrollFactor(0); // Fija los corazones para que no se muevan con la cámara
+      corazon.setOrigin(1, 0); // Ajusta el origen del sprite para alinearlos correctamente
+      corazon.x -= i * (corazon.displayWidth + 45); // Ajusta la posición en el eje x con un espacio entre ellos
+    }
   }
 
   update() {
+    //inicia escena de juego superado
+    if (this.juegoSuperado) {
+      //llama a funcion para calcular el puntaje
+      this.calcularPuntaje();
+
+      //inicio de escena
+      this.scene.start("nivelSuperado", {
+        puntajeFinal: this.puntajeFinal,
+        nivelActual: "nivel3", //traspaso de data
+      });
+    }
+
+    //inicia escena de juego perdido
+    if (this.juegoPerdido) {
+      this.scene.start("nivelPerdido", {
+        nivelActual: "nivel3", //traspaso de data
+      });
+    }
+
     //movimiento de personaje
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-600);
@@ -122,35 +218,86 @@ export default class Nivel3 extends Phaser.Scene {
         this.jugador.anims.play("jumpLeft");
       }
     }
-    //movimiento de personaje
-    if (this.cursors.left.isDown) {
-      this.jugador.setVelocityX(-600);
-      if (this.jugador.body.blocked.down) {
-        this.jugador.anims.play("left", true);
-      } else {
-        this.jugador.anims.play("jumpLeft", true);
-      }
-    } else if (this.cursors.right.isDown) {
-      this.jugador.setVelocityX(600);
-      if (this.jugador.body.blocked.down) {
-        this.jugador.anims.play("right", true);
-      } else {
-        this.jugador.anims.play("jumpRight", true);
-      }
-    } else {
-      this.jugador.setVelocityX(0);
-      if (this.jugador.body.blocked.down) {
-        this.jugador.anims.play("turn");
-      }
-    }
+  }
 
-    if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-900);
-      if (this.jugador.body.velocity.x > 0) {
-        this.jugador.anims.play("jumpRight");
-      } else if (this.jugador.body.velocity.x < 0) {
-        this.jugador.anims.play("jumpLeft");
-      }
+  perderVida(jugador, hielos) {
+    hielos.disableBody(true, true);
+
+    const explosion = this.add.sprite(hielos.x, hielos.y, "explosion2");
+    explosion.play("explosion2");
+
+    hielos.destroy();
+    this.time.delayedCall(1000, () => {
+      explosion.destroy();
+    });
+
+    // Deshabilitar la interacción del jugador temporalmente
+    this.jugador.disableBody(true, true);
+
+    // Reproducir la animación de daño del personaje
+    this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
+
+    const mareo = this.add.sprite(jugador.x, jugador.y, "personaje");
+    mareo.play("damageUp");
+
+    this.time.delayedCall(1000, () => {
+      mareo.destroy();
+    });
+
+    // Establecer un temporizador para restaurar el estado del jugador después de cierto tiempo
+    this.time.delayedCall(1000, () => {
+      // Restaurar el estado del jugador
+      this.jugador.enableBody(true, jugador.x, jugador.y, true, true);
+      this.jugador.setAlpha(1); // Restaurar la opacidad del personaje
+    });
+
+    // restar una vida al jugador
+    this.vidas--;
+
+    console.log(this.vidas);
+
+    // cambiar el sprite del corazón a uno gris
+    const corazon = this.corazones.getChildren()[this.vidas];
+    corazon.setTexture("corazonGris");
+
+    if (this.vidas <= 0) {
+      // si no quedan vidas, el juego se pierde
+      this.juegoPerdido = true;
     }
+  }
+
+  caidaHielos() {
+    // Create and position the obstacle above the player
+    const hielos = this.physics.add.sprite(
+      this.jugador.x,
+      this.jugador.y - 1500,
+      "hielos"
+    );
+    // Set obstacle properties, such as velocity and gravity
+    hielos.setVelocityY(300);
+    hielos.setGravityY(1000);
+    hielos.setCollideWorldBounds(true);
+
+    this.hielos.add(hielos); // Agregar el objeto de hielo al grupo
+  }
+
+  colisionHielos(hielos) {
+    hielos.disableBody(true, true);
+
+    const explosion = this.add.sprite(hielos.x, hielos.y, "explosion2");
+    explosion.play("explosion2");
+
+    hielos.destroy();
+    this.time.delayedCall(1000, () => {
+      explosion.destroy();
+    });
+  }
+
+  calcularPuntaje() {
+    const puntajeElementos = (this.cantidadHarina + this.cantidadMaiz) * 100;
+    const puntajeVidas = this.vidas * 500;
+    const puntajeTiempo = this.temporizador * 10;
+
+    this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
 }

@@ -32,6 +32,8 @@ export default class NivelPerdido extends Phaser.Scene {
             this.scene.start("nivel1");
           } else if (this.nivelActual === "nivel2") {
             this.scene.start("nivel2");
+          } else if (this.nivelActual === "nivel3"){ 
+            this.scene.start("nivel3");
           }
         })
         .on("pointerover", () => {
