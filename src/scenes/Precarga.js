@@ -80,6 +80,8 @@ export default class Precarga extends Phaser.Scene {
       "./public/assets/images/nivel3/plataformas.png"
     );
     this.load.image("hielos", "./public/assets/images/nivel3/hielos.png");
+    this.load.image("centolla", "./public/assets/images/nivel3/centolla.png");
+
 
     this.load.image("jugar", "./public/assets/images/jugar.png");
     this.load.image("ayuda", "./public/assets/images/ayuda.png");
@@ -366,7 +368,7 @@ export default class Precarga extends Phaser.Scene {
       hideOnComplete: true,
     });
     // init scene juego
-    this.scene.start("nivel3");
+    this.scene.start("nivel1");
   }
 
   update() {}
