@@ -44,9 +44,8 @@ export default class NivelSuperado extends Phaser.Scene {
         if (this.nivelActual === "nivel1") {
           this.scene.start("nivel2");
         } else if (this.nivelActual === "nivel2") {
-          // Aquí puedes decidir qué hacer después de superar el nivel 2
-          // Por ejemplo, volver al menú principal o mostrar una escena de fin del juego.
-          this.scene.start("menu");
+  
+          this.scene.start("nivel3");
         }
 
    

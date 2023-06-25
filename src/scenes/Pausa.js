@@ -14,7 +14,7 @@ export default class Pausa extends Phaser.Scene {
 
   create() {
 
-    this.recolectable = this.sound.add("recolectado");
+    this.click = this.sound.add("click");
 
     this.add.image(1333, 1000, "fondoPausa");
     this.add.image(1333, 700, "juegoPausado");
@@ -26,8 +26,8 @@ export default class Pausa extends Phaser.Scene {
 
     botonReanudar
       .on("pointerup", () => {
-        this.recolectable.play();
-
+        this.click.play();
+        
         this.scene.stop("pausa");
         this.scene.resume(this.nivelActual);
       })
@@ -45,6 +45,8 @@ export default class Pausa extends Phaser.Scene {
 
     botonReintentar
       .on("pointerup", () => {
+        this.click.play();
+    
         this.scene.stop("pausa");
         this.scene.start(this.nivelActual);
       })
@@ -63,6 +65,8 @@ export default class Pausa extends Phaser.Scene {
 
     botonVolver
       .on("pointerup", () => {
+        this.click.play();
+        
         this.scene.stop("pausa");
         this.scene.stop(this.nivelActual);
         this.scene.start("menu");

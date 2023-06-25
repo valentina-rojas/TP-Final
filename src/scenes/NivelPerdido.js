@@ -20,6 +20,7 @@ export default class NivelPerdido extends Phaser.Scene {
       this.add.image(1333, 1000, "cartelPerdiste");
   
     
+      this.click = this.sound.add("click");
         
       //botón para reiniciar el nivel
       const botonReintentar = this.add
@@ -28,6 +29,8 @@ export default class NivelPerdido extends Phaser.Scene {
   
       botonReintentar
         .on("pointerup", () => {
+          this.click.play();
+
           if (this.nivelActual === "nivel1") {
             this.scene.start("nivel1");
           } else if (this.nivelActual === "nivel2") {
@@ -50,6 +53,8 @@ export default class NivelPerdido extends Phaser.Scene {
   
       botonVolver
         .on("pointerup", () => {
+          this.click.play();
+          
           this.scene.start("menu");
         })
         .on("pointerover", () => {

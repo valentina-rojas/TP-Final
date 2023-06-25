@@ -233,6 +233,8 @@ export default class Nivel1 extends Phaser.Scene {
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     pausaBoton
       .on("pointerup", () => {
+        this.musica.stop();
+        this.click.play();
         this.scene.pause("nivel1");
         this.scene.launch("pausa", { nivelActual: nivelActual });
       })
@@ -295,6 +297,15 @@ export default class Nivel1 extends Phaser.Scene {
     }
 
     this.recolectable = this.sound.add("recolectado");
+    this.click = this.sound.add("click");
+    this.daño = this.sound.add("daño");
+    this.ganaste = this.sound.add("ganaste");
+    this.perdiste1 = this.sound.add("perdiste1");
+    this.perdiste2 = this.sound.add("perdiste2");
+    this.musica = this.sound.add("musica4")
+
+    this.musica.play();
+
   }
 
   update() {
@@ -302,9 +313,11 @@ export default class Nivel1 extends Phaser.Scene {
 
     //inicia escena de juego superado
     if (this.juegoSuperado) {
+      this.musica.stop();
+      this.ganaste.play();
       //llama a funcion para calcular el puntaje
       this.calcularPuntaje();
-
+     
       //inicio de escena
       this.scene.start("nivelSuperado", {
         puntajeFinal: this.puntajeFinal,
@@ -314,6 +327,8 @@ export default class Nivel1 extends Phaser.Scene {
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
+      this.musica.stop();
+      this.perdiste2.play();
       this.scene.start("nivelPerdido", {
         nivelActual: "nivel1", //traspaso de data
       });
@@ -385,6 +400,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     if (this.temporizador <= 0) {
       //condicion perder si timer llega a 0
+  
       this.juegoPerdido = true;
     }
   }
@@ -396,6 +412,8 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   perderVida(jugador) {
+
+    this.daño.play({ volume: 0.3 });
     // restar una vida al jugador
     this.vidas--;
 

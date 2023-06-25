@@ -14,6 +14,8 @@ export default class Inicio extends Phaser.Scene {
     this.add.image(1333, 1000, "inicio3");
     this.add.image(1333, 1000, "inicio2");
     this.add.image(1333, 1000, "inicio1");
+    this.click = this.sound.add("click");
+
 
     this.imagenActual = 0; // Variable para rastrear la imagen actual
 
@@ -28,7 +30,7 @@ export default class Inicio extends Phaser.Scene {
       .image(2450, 1750, "siguiente", { fontSize: 100, fill: "#ffffff" })
       .setInteractive();
 
-    siguienteBoton.on("pointerup", () => this.mostrarSiguienteImagen());
+    siguienteBoton.on("pointerup", () => {this.mostrarSiguienteImagen(); this.click.play()});
     siguienteBoton.on("pointerover", () => {
       siguienteBoton.setTexture("siguientePresionado");
     });
@@ -40,7 +42,7 @@ export default class Inicio extends Phaser.Scene {
     const saltarBoton = this.add
       .image(2500, 1900,  "saltar", { fontSize: 100, fill: "#ffffff" })
       .setInteractive();
-    saltarBoton.on("pointerup", () => this.scene.start("menu"));
+    saltarBoton.on("pointerup", () => {this.scene.start("menu"); this.click.play()});
     saltarBoton.on("pointerover", () => {
       saltarBoton.setTexture("saltarPresionado");
     });

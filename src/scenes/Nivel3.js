@@ -126,6 +126,8 @@ export default class Nivel3 extends Phaser.Scene {
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     pausaBoton
       .on("pointerup", () => {
+        this.musica.stop();
+        this.click.play();
         this.scene.pause("nivel3");
         this.scene.launch("pausa", { nivelActual: nivelActual });
       })
@@ -166,11 +168,23 @@ export default class Nivel3 extends Phaser.Scene {
       corazon.setOrigin(1, 0); // Ajusta el origen del sprite para alinearlos correctamente
       corazon.x -= i * (corazon.displayWidth + 45); // Ajusta la posición en el eje x con un espacio entre ellos
     }
+
+    this.recolectable = this.sound.add("recolectado");
+    this.click = this.sound.add("click");
+    this.daño = this.sound.add("daño");
+    this.ganaste = this.sound.add("ganaste");
+    this.perdiste1 = this.sound.add("perdiste1");
+    this.perdiste2 = this.sound.add("perdiste2");
+    this.musica = this.sound.add("musica1")
+
+    this.musica.play();
   }
 
   update() {
     //inicia escena de juego superado
     if (this.juegoSuperado) {
+      this.musica.stop();
+      this.ganaste.play();
       //llama a funcion para calcular el puntaje
       this.calcularPuntaje();
 
@@ -183,6 +197,8 @@ export default class Nivel3 extends Phaser.Scene {
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
+      this.musica.stop();
+      this.perdiste1.play();
       this.scene.start("nivelPerdido", {
         nivelActual: "nivel3", //traspaso de data
       });
@@ -221,6 +237,8 @@ export default class Nivel3 extends Phaser.Scene {
   }
 
   perderVida(jugador, hielos) {
+
+    this.daño.play();
     hielos.disableBody(true, true);
 
     const explosion = this.add.sprite(hielos.x, hielos.y, "explosion2");
@@ -264,6 +282,8 @@ export default class Nivel3 extends Phaser.Scene {
       // si no quedan vidas, el juego se pierde
       this.juegoPerdido = true;
     }
+
+
   }
 
   caidaHielos() {

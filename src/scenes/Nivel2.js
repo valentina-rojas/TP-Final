@@ -208,6 +208,8 @@ export default class Nivel2 extends Phaser.Scene {
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     pausaBoton
       .on("pointerup", () => {
+        this.musica.stop();
+        this.click.play();
         this.scene.pause("nivel2");
         this.scene.launch("pausa", { nivelActual: nivelActual });
       })
@@ -257,11 +259,23 @@ export default class Nivel2 extends Phaser.Scene {
     }
 
     this.recolectable = this.sound.add("recolectado");
+   
+    this.click = this.sound.add("click");
+    this.daño = this.sound.add("daño");
+    this.ganaste = this.sound.add("ganaste");
+    this.perdiste1 = this.sound.add("perdiste1");
+    this.perdiste2 = this.sound.add("perdiste2");
+
+    this.musica = this.sound.add("musica6")
+
+    this.musica.play();
   }
 
   update() {
     //inicia escena de juego superado
     if (this.juegoSuperado) {
+      this.musica.stop();
+      this.ganaste.play();
       //llama a funcion para calcular el puntaje
       this.calcularPuntaje();
 
@@ -274,6 +288,8 @@ export default class Nivel2 extends Phaser.Scene {
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
+      this.musica.stop();
+      this.perdiste1.play();
       this.scene.start("nivelPerdido", {
         nivelActual: "nivel2", //traspaso de data
       });
@@ -356,6 +372,9 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   perderVida(jugador) {
+
+    this.daño.play();
+
     if (this.jugador.body.blocked.left) {
       this.jugador.x += 150;
       console.log("choque izquierda");
