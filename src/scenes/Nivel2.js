@@ -47,6 +47,12 @@ export default class Nivel2 extends Phaser.Scene {
       .setOrigin(0, 1)
       .setScrollFactor(0.5);
 
+    const capaSueloAtras = map.addTilesetImage("suelo 1", "suelo1");
+    const sueloAtrasLayer = map
+      .createLayer("backFloor", capaSueloAtras, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(0.6);
+
     const capaArboles = map.addTilesetImage("arboles", "arboles");
     const arbolesLayer = map
       .createLayer("trees", capaArboles, 0, 0)
@@ -259,14 +265,14 @@ export default class Nivel2 extends Phaser.Scene {
     }
 
     this.recolectable = this.sound.add("recolectado");
-   
+
     this.click = this.sound.add("click");
     this.daño = this.sound.add("daño");
     this.ganaste = this.sound.add("ganaste");
     this.perdiste1 = this.sound.add("perdiste1");
     this.perdiste2 = this.sound.add("perdiste2");
 
-    this.musica = this.sound.add("musica6")
+    this.musica = this.sound.add("musica6");
 
     this.musica.play();
   }
@@ -372,7 +378,6 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   perderVida(jugador) {
-
     this.daño.play();
 
     if (this.jugador.body.blocked.left) {

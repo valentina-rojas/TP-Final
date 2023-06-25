@@ -49,7 +49,7 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("arbustos1", "./public/assets/images/nivel2/arbustos1.png");
     this.load.image("arbustos2", "./public/assets/images/nivel2/arbustos2.png");
     this.load.image("edificios", "./public/assets/images/nivel2/edificios.png");
-    this.load.image("suelo 1", "./public/assets/images/nivel2/suelo 1.png");
+    this.load.image("suelo1", "./public/assets/images/nivel2/suelo 1.png");
     this.load.image("suelo2", "./public/assets/images/nivel2/suelo 2.png");
     this.load.image(
       "plataformas2",
@@ -368,7 +368,7 @@ export default class Precarga extends Phaser.Scene {
       hideOnComplete: true,
     });
     // init scene juego
-    this.scene.start("nivel1");
+    this.scene.start("nivel2");
   }
 
   update() {}
