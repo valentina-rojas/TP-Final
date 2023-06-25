@@ -23,9 +23,9 @@ export default class NivelSuperado extends Phaser.Scene {
     let imagenComida;
 
     if (this.nivelActual === "nivel1") {
-      imagenComida =   this.add.image(1333, 600, "humita");
+      imagenComida =   this.add.image(1333, 600, "choripan");
     } else if (this.nivelActual === "nivel2") {
-      imagenComida = this.add.image(1333, 600, "choripan");
+      imagenComida = this.add.image(1333, 600, "humita");
     } else if (this.nivelActual === "nivel3") {
       imagenComida = this.add.image(1333, 600, "centollaPlato");
     }
@@ -69,8 +69,9 @@ export default class NivelSuperado extends Phaser.Scene {
           this.scene.start("nivel1");
         } else if (this.nivelActual === "nivel2") {
           this.scene.start("nivel2");
-        }
-      })
+        } else if (this.nivelActual === "nivel3") {
+          this.scene.start("nivel3");
+      }})
       .on("pointerover", () => {
         botonReintentar.setTexture("botonReintentarPresionado");
       })

@@ -1,5 +1,3 @@
-// URL to explain PHASER scene: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
-
 export default class Nivel1 extends Phaser.Scene {
   constructor() {
     // key of the scene
@@ -8,10 +6,10 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   init() {
-    this.cantidadHarina = 0;
-    this.cantidadMaiz = 0;
-    this.puntajeFinal = 0;
+    this.cantidadPan = 0;
+    this.cantidadCarne = 0;
     this.temporizador = 90;
+    this.puntajeFinal = 0;
     this.vidas = 3;
 
     this.juegoSuperado = false;
@@ -23,49 +21,55 @@ export default class Nivel1 extends Phaser.Scene {
   create() {
     const nivelActual = "nivel1";
 
-    const map = this.make.tilemap({ key: "map" });
+    const map = this.make.tilemap({ key: "map2" });
 
-    const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
-    const fondoLayer = map
-      .createLayer("background", capaFondo, 0, 0)
+    const capaCielo = map.addTilesetImage("cielo", "cielo2");
+    const cieloLayer = map
+      .createLayer("sky", capaCielo, 0, 0)
       .setOrigin(0)
       .setScrollFactor(0, 1);
 
-    const capaMontañas = map.addTilesetImage("montañas", "montañas");
-    const montañasLayer = map
-      .createLayer("mountains", capaMontañas, 0, 0)
+    const capaEdificios = map.addTilesetImage("edificios", "edificios");
+    const edificiosLayer = map
+      .createLayer("buildings", capaEdificios, 0, 0)
       .setOrigin(0, 1)
       .setScrollFactor(0.25);
 
-    const capaArbustos1 = map.addTilesetImage("arbustos1", "arbustos01");
+    const capaArbustos1 = map.addTilesetImage("arbustos1", "arbustos1");
     const arbustos1Layer = map
       .createLayer("bushes1", capaArbustos1, 0, 0)
       .setOrigin(0, 1)
       .setScrollFactor(0.4);
 
-    const capaArbustos2 = map.addTilesetImage("arbustos2", "arbustos02");
+    const capaArbustos2 = map.addTilesetImage("arbustos2", "arbustos2");
     const arbustos2Layer = map
       .createLayer("bushes2", capaArbustos2, 0, 0)
       .setOrigin(0, 1)
       .setScrollFactor(0.5);
 
-    const capaSuelo = map.addTilesetImage("suelo", "suelo");
-    const sueloLayer = map
-      .createLayer("floor", capaSuelo, 0, 0)
+    const capaSueloAtras = map.addTilesetImage("suelo 1", "suelo1");
+    const sueloAtrasLayer = map
+      .createLayer("backFloor", capaSueloAtras, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(0.6);
+
+    const capaArboles = map.addTilesetImage("arboles", "arboles");
+    const arbolesLayer = map
+      .createLayer("trees", capaArboles, 0, 0)
       .setOrigin(0, 1)
       .setScrollFactor(0.75);
 
-    const capaPlataformas = map.addTilesetImage(
-      "plataformas",
-      "tilesPlataforma"
-    );
+    const capaSuelo = map.addTilesetImage("suelo", "suelo2");
+    const sueloLayer = map
+      .createLayer("floor", capaSuelo, 0, 0)
+      .setOrigin(0, 1)
+      .setScrollFactor(1);
+
+    const capaPlataformas = map.addTilesetImage("plataformas", "plataformas2");
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
-
-    const objectosLayer = map.getObjectLayer("objetos");
-
     plataformaLayer.setCollisionByProperty({ colision: true });
 
-    console.log("spawn point player", objectosLayer);
+    const objectosLayer = map.getObjectLayer("objetos");
 
     let spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
     console.log(spawnPoint);
@@ -86,102 +90,74 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    // grupo vacío del elemento harina
-    this.harina = this.physics.add.group();
+    // grupo vacío del elemento pan
+    this.pan = this.physics.add.group();
 
-    // si el tipo es "harina" agregar al grupo
+    // si el tipo es "pan" agregar al grupo
     objectosLayer.objects.forEach((objData) => {
       const { x = 0, y = 0, name } = objData;
       switch (name) {
-        case "harina": {
-          // añadir harina en pantalla
-          const harina = this.harina.create(x, y, "harina");
+        case "pan": {
+          // añadir en pantalla
+          const pan = this.pan.create(x, y, "pan");
           break;
         }
       }
     });
 
-    // grupo de maiz
-    this.maiz = this.physics.add.group();
+    // grupo vacío del elemento carne
+    this.carne = this.physics.add.group();
 
-    // si el tipo es "maiz" agregar al grupo
+    // si el tipo es "carne" agregar al grupo
     objectosLayer.objects.forEach((objData) => {
       const { x = 0, y = 0, name } = objData;
       switch (name) {
-        case "maiz": {
-          // añadir maiz en pantalla
-          const maiz = this.maiz.create(x, y, "maiz");
+        case "carne": {
+          // añadir en pantalla
+          const carne = this.carne.create(x, y, "carne");
           break;
         }
       }
     });
 
-    //grupo de enemigos
-    this.enemigo = this.physics.add.group();
+    this.maleza = this.physics.add.group();
 
     objectosLayer.objects.forEach((objData) => {
       const { x = 0, y = 0, name } = objData;
       switch (name) {
-        case "enemigo": {
-          // añadir enemigo en pantalla
-          const enemigo = this.enemigo.create(x, y, "enemigo");
-          break;
-        }
-      }
-    });
-
-    //grupo de cactus
-    this.cactus = this.physics.add.group();
-
-    objectosLayer.objects.forEach((objData) => {
-      const { x = 0, y = 0, name } = objData;
-      switch (name) {
-        case "cactus": {
-          // añadir cactus en pantalla
-          const cactus = this.cactus.create(x, y, "cactus");
-          cactus.setImmovable(true);
+        case "maleza": {
+          const maleza = this.maleza.create(x, y, "maleza");
+          maleza.setImmovable(true);
           break;
         }
       }
     });
 
     this.physics.add.collider(this.salida, plataformaLayer);
-    this.physics.add.collider(this.harina, plataformaLayer);
-    this.physics.add.collider(this.maiz, plataformaLayer);
-    this.physics.add.collider(this.enemigo, plataformaLayer);
-    this.physics.add.collider(this.cactus, plataformaLayer);
-    this.physics.add.collider(this.enemigo, this.cactus);
+    this.physics.add.collider(this.pan, plataformaLayer);
+    this.physics.add.collider(this.carne, plataformaLayer);
+    this.physics.add.collider(this.maleza, plataformaLayer);
 
     this.physics.add.collider(
       this.jugador,
-      this.cactus,
-      this.colisionCactus,
+      this.pan,
+      this.recolectarPan,
       null,
       this
     );
 
     this.physics.add.collider(
       this.jugador,
-      this.enemigo,
-      this.colisionEnemigo,
+      this.carne,
+      this.recolectarCarne,
       null,
       this
     );
 
-    //colision entre jugador y harina
     this.physics.add.collider(
       this.jugador,
-      this.harina,
-      this.recolectarHarina,
-      null,
-      this
-    );
-
-    //colision entre jugador y maiz
-    this.physics.add.collider(
-      this.jugador,
-      this.maiz,
-      this.recolectarMaiz,
+      this.maleza,
+      this.perderVida,
       null,
       this
     );
@@ -194,7 +170,6 @@ export default class Nivel1 extends Phaser.Scene {
       null,
       this
     );
-
     //temporizador
     this.time.addEvent({
       delay: 1000,
@@ -204,30 +179,36 @@ export default class Nivel1 extends Phaser.Scene {
     });
 
     this.add.image(366, 110, "reloj").setScrollFactor(0);
-    this.add.image(470, 110, "maizIcono").setScale(0.7).setScrollFactor(0);
-    this.add.image(250, 110, "harinaIcono").setScale(0.7).setScrollFactor(0);
+    this.add.image(470, 110, "carne").setScale(0.5).setScrollFactor(0);
+    this.add.image(250, 110, "pan").setScale(0.5).setScrollFactor(0);
 
     //texto que muestra el temporizador
-    this.temporizadorTexto = this.add.text(77, 80, this.temporizador, {
-      fontSize: "60px",
-      fill: "#000",
-      fontFamily: "cursive",
-      fontWeight: "bold",
-    });
+    this.temporizadorTexto = this.add
+      .text(77, 80, this.temporizador, {
+        fontSize: "60px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
 
-    this.cantidadHarinaTexto = this.add.text(300, 80, "0/5", {
-      fontSize: "50px",
-      fill: "#000",
-      fontFamily: "cursive",
-      fontWeight: "bold",
-    });
+    this.cantidadPanTexto = this.add
+      .text(300, 80, "0/5", {
+        fontSize: "50px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
 
-    this.cantidadMaizTexto = this.add.text(520, 80, "0/6", {
-      fontSize: "50px",
-      fill: "#000",
-      fontFamily: "cursive",
-      fontWeight: "bold",
-    });
+    this.cantidadCarneTexto = this.add
+      .text(520, 80, "0/6", {
+        fontSize: "50px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
 
     //botón para la escena de pausa
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
@@ -235,7 +216,7 @@ export default class Nivel1 extends Phaser.Scene {
       .on("pointerup", () => {
         this.musica.stop();
         this.click.play();
-        this.scene.pause("nivel1");
+        this.scene.pause("nivel2");
         this.scene.launch("pausa", { nivelActual: nivelActual });
       })
       .on("pointerover", () => {
@@ -248,23 +229,10 @@ export default class Nivel1 extends Phaser.Scene {
 
     //camara
     this.cameras.main.startFollow(this.jugador);
-
     //limites
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
     //para que la camara no se vaya fuera del mapa
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
-    //fijar texto para que no se mueva con la camara
-    this.cantidadHarinaTexto.setScrollFactor(0);
-    this.cantidadMaizTexto.setScrollFactor(0);
-    this.temporizadorTexto.setScrollFactor(0);
-
-    // Añadir enemigos en pantalla
-    this.enemigo.getChildren().forEach((enemigo) => {
-      enemigo.anims.play("enemiesLeft");
-      enemigo.body.setVelocityX(-200); // Velocidad inicial del enemigo
-    });
 
     //grupo almacenar los sprites de los corazones
     this.corazones = this.add.group();
@@ -297,45 +265,43 @@ export default class Nivel1 extends Phaser.Scene {
     }
 
     this.recolectable = this.sound.add("recolectado");
+
     this.click = this.sound.add("click");
     this.daño = this.sound.add("daño");
     this.ganaste = this.sound.add("ganaste");
     this.perdiste1 = this.sound.add("perdiste1");
     this.perdiste2 = this.sound.add("perdiste2");
-    this.musica = this.sound.add("musica4")
+
+    this.musica = this.sound.add("musica6");
 
     this.musica.play();
-
   }
 
   update() {
-    this.updateEnemigos();
-
     //inicia escena de juego superado
     if (this.juegoSuperado) {
       this.musica.stop();
       this.ganaste.play();
       //llama a funcion para calcular el puntaje
       this.calcularPuntaje();
-     
+
       //inicio de escena
       this.scene.start("nivelSuperado", {
         puntajeFinal: this.puntajeFinal,
-        nivelActual: "nivel1", //traspaso de data del puntaje
+        nivelActual: "nivel1", //traspaso de data
       });
     }
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
       this.musica.stop();
-      this.perdiste2.play();
+      this.perdiste1.play();
       this.scene.start("nivelPerdido", {
         nivelActual: "nivel1", //traspaso de data
       });
     }
 
     //movimiento de personaje
-
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-600);
       if (this.jugador.body.blocked.down) {
@@ -367,92 +333,53 @@ export default class Nivel1 extends Phaser.Scene {
     }
   }
 
-  recolectarHarina(jugador, harina) {
-    harina.disableBody(true, true);
+  recolectarPan(jugador, pan) {
+    pan.disableBody(true, true);
 
-    const explosion = this.add.sprite(harina.x, harina.y, "explosion");
+    const explosion = this.add.sprite(pan.x, pan.y, "explosion");
     explosion.play("explosion");
 
     this.recolectable.play();
 
-    this.cantidadHarina++;
+    this.cantidadPan++;
 
-    this.cantidadHarinaTexto.setText(this.cantidadHarina + "/5");
+    this.cantidadPanTexto.setText(this.cantidadPan + "/5");
   }
 
-  recolectarMaiz(jugador, maiz) {
-    maiz.disableBody(true, true);
+  recolectarCarne(jugador, carne) {
+    carne.disableBody(true, true);
 
-    const explosion = this.add.sprite(maiz.x, maiz.y, "explosion");
+    const explosion = this.add.sprite(carne.x, carne.y, "explosion");
     explosion.play("explosion");
 
     this.recolectable.play();
 
-    this.cantidadMaiz++;
+    this.cantidadCarne++;
 
-    this.cantidadMaizTexto.setText(this.cantidadMaiz + "/6");
+    this.cantidadCarneTexto.setText(this.cantidadCarne + "/6");
   }
 
   temporizadorDescendente() {
     this.temporizador = this.temporizador - 1;
-    this.temporizadorTexto.setText(this.temporizador);
+    this.temporizadorTexto.setText(+this.temporizador);
     //console.log(this.temporizador);
 
-    if (this.temporizador <= 0) {
-      //condicion perder si timer llega a 0
-  
-      this.juegoPerdido = true;
-    }
+    if (this.jugador.body)
+      if (this.temporizador <= 0) {
+        //condicion perder si timer llega a 0
+        this.juegoPerdido = true;
+      }
   }
 
   verificarRecolectables() {
-    if (this.cantidadMaiz >= 1 && this.cantidadHarina >= 1) {
+    if (this.cantidadPan >= 1 && this.cantidadCarne >= 1) {
       this.juegoSuperado = true;
     }
   }
 
   perderVida(jugador) {
+    this.daño.play();
 
-    this.daño.play({ volume: 0.3 });
-    // restar una vida al jugador
-    this.vidas--;
-
-    console.log(this.vidas);
-
-    // cambiar el sprite del corazón a uno gris
-    const corazon = this.corazones.getChildren()[this.vidas];
-    corazon.setTexture("corazonGris");
-
-    if (this.vidas <= 0) {
-      // si no quedan vidas, el juego se pierde
-      this.juegoPerdido = true;
-    }
-  }
-
-  calcularPuntaje() {
-    const puntajeElementos = (this.cantidadHarina + this.cantidadMaiz) * 100;
-    const puntajeVidas = this.vidas * 500;
-    const puntajeTiempo = this.temporizador * 10;
-
-    this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
-  }
-
-  // Actualizar la posición de cada enemigo en cada fotograma
-  updateEnemigos() {
-    this.enemigo.getChildren().forEach((enemigo) => {
-      if (enemigo.body.blocked.left || enemigo.body.touching.left) {
-        // Colisión con un obstáculo a la izquierda, cambiar dirección y animación
-        enemigo.body.setVelocityX(200); // Cambiar dirección
-        enemigo.anims.play("enemiesRight", true); // Reproducir animación "right"
-      } else if (enemigo.body.blocked.right || enemigo.body.touching.right) {
-        // Colisión con un obstáculo a la derecha, cambiar dirección y animación
-        enemigo.body.setVelocityX(-200); // Cambiar dirección
-        enemigo.anims.play("enemiesLeft", true); // Reproducir animación "left"
-      }
-    });
-  }
-
-  colisionCactus(jugador, cactus) {
     if (this.jugador.body.blocked.left) {
       this.jugador.x += 150;
       console.log("choque izquierda");
@@ -500,57 +427,26 @@ export default class Nivel1 extends Phaser.Scene {
       this.jugador.setAlpha(1); // Restaurar la opacidad del personaje
     });
 
-    this.perderVida();
+    // restar una vida al jugador
+    this.vidas--;
+
+    console.log(this.vidas);
+
+    // cambiar el sprite del corazón a uno gris
+    const corazon = this.corazones.getChildren()[this.vidas];
+    corazon.setTexture("corazonGris");
+
+    if (this.vidas <= 0) {
+      // si no quedan vidas, el juego se pierde
+      this.juegoPerdido = true;
+    }
   }
 
-  colisionEnemigo(jugador, enemigos) {
-    if (this.jugador.body.touching.left) {
-      this.jugador.x += 150;
-      console.log("choque izquierda");
-      this.jugador.body.setVelocityX(200);
+  calcularPuntaje() {
+    const puntajeElementos = (this.cantidadPan + this.cantidadCarne) * 100;
+    const puntajeVidas = this.vidas * 500;
+    const puntajeTiempo = this.temporizador * 10;
 
-      // Deshabilitar la interacción del jugador temporalmente
-      this.jugador.disableBody(true, true);
-      // Reproducir la animación de daño del personaje
-      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
-
-      const choqueIzquierda = this.add.sprite(
-        jugador.x,
-        jugador.y,
-        "personaje"
-      );
-      choqueIzquierda.play("damageLeft");
-
-      this.time.delayedCall(1000, () => {
-        choqueIzquierda.destroy();
-      });
-    } else if (this.jugador.body.touching.right) {
-      this.jugador.x -= 150;
-      console.log("choque derecha");
-      this.jugador.body.setVelocityX(-200);
-
-      // Deshabilitar la interacción del jugador temporalmente
-      this.jugador.disableBody(true, true);
-      // Reproducir la animación de daño del personaje
-      this.jugador.setAlpha(0.5); // Hacer el personaje semitransparente
-
-      const choqueDerecha = this.add.sprite(jugador.x, jugador.y, "personaje");
-      choqueDerecha.play("damageRight");
-
-      this.time.delayedCall(1000, () => {
-        choqueDerecha.destroy();
-      });
-    } else if (this.jugador.body.touching.down) {
-      this.jugador.body.setVelocityY(-400);
-    }
-
-    // Establecer un temporizador para restaurar el estado del jugador después de cierto tiempo
-    this.time.delayedCall(1000, () => {
-      // Restaurar el estado del jugador
-      this.jugador.enableBody(true, jugador.x, jugador.y, true, true);
-      this.jugador.setAlpha(1); // Restaurar la opacidad del personaje
-    });
-
-    this.perderVida();
+    this.puntajeFinal = puntajeElementos + puntajeVidas + puntajeTiempo;
   }
 }

@@ -63,7 +63,9 @@ export default class Nivel3 extends Phaser.Scene {
     const glaciares3Layer = map
       .createLayer("glaciers3", capaGlaciares3, 0, 0)
       .setOrigin(0, 1)
-      .setScrollFactor(0.95);
+      .setScrollFactor(1.5);
+
+
 
     const capaAgua3 = map.addTilesetImage("aguaFrente", "aguaFrente");
     const Agua3Layer = map
@@ -282,6 +284,8 @@ export default class Nivel3 extends Phaser.Scene {
   }
 
   update() {
+
+
     //inicia escena de juego superado
     if (this.juegoSuperado) {
       this.musica.stop();
@@ -451,7 +455,7 @@ export default class Nivel3 extends Phaser.Scene {
   }
 
   calcularPuntaje() {
-    const puntajeElementos = (this.cantidadHarina + this.cantidadMaiz) * 100;
+    const puntajeElementos = (this.cantidadCentolla + this.cantidadLechuga) * 100;
     const puntajeVidas = this.vidas * 500;
     const puntajeTiempo = this.temporizador * 10;
 
