@@ -10,6 +10,7 @@ import Pausa from "./src/scenes/Pausa.js";
 import Precarga from "./src/scenes/Precarga.js";
 
 
+
 // Create a new Phaser config object
 const config = {
   type: Phaser.AUTO,

@@ -26,10 +26,10 @@ export default class NivelSuperado extends Phaser.Scene {
       imagenComida =   this.add.image(1333, 600, "humita");
     } else if (this.nivelActual === "nivel2") {
       imagenComida = this.add.image(1333, 600, "choripan");
+    } else if (this.nivelActual === "nivel3") {
+      imagenComida = this.add.image(1333, 600, "centollaPlato");
     }
-
-
-
+    
     this.add.image(1333, 1000, "cartelPuntaje");
 
     //botón para reanudar el juego

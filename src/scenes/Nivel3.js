@@ -9,6 +9,8 @@ export default class Nivel3 extends Phaser.Scene {
     this.temporizador = 90;
     this.puntajeFinal = 0;
     this.vidas = 3;
+    this.cantidadCentolla = 0;
+    this.cantidadLechuga = 0;
 
     this.juegoSuperado = false;
     this.juegoPerdido = false;
@@ -88,7 +90,45 @@ export default class Nivel3 extends Phaser.Scene {
     this.jugador.setBounce(0.1);
     this.jugador.setCollideWorldBounds(true);
 
+    spawnPoint = map.findObject("objetos", (obj) => obj.name === "salida");
+    console.log("spawn point salida ", spawnPoint);
+    this.salida = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "salida");
+
+
     this.cursors = this.input.keyboard.createCursorKeys();
+
+
+    
+    this.centolla = this.physics.add.group();
+
+    
+    objectosLayer.objects.forEach((objData) => {
+      const { x = 0, y = 0, name } = objData;
+      switch (name) {
+        case "centolla": {
+          // añadir en pantalla
+          const centolla = this.centolla.create(x, y, "centolla");
+          break;
+        }
+      }
+    });
+
+
+    this.lechuga = this.physics.add.group();
+
+    
+    objectosLayer.objects.forEach((objData) => {
+      const { x = 0, y = 0, name } = objData;
+      switch (name) {
+        case "lechuga": {
+          // añadir en pantalla
+          const lechuga = this.lechuga.create(x, y, "lechuga");
+          break;
+        }
+      }
+    });
+
+  
 
     //camara
     this.cameras.main.startFollow(this.jugador);
@@ -98,6 +138,34 @@ export default class Nivel3 extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
     this.hielos = this.physics.add.group();
+
+    this.physics.add.collider(this.salida, plataformaLayer);
+    this.physics.add.collider(this.centolla, plataformaLayer);
+    this.physics.add.collider(this.lechuga, plataformaLayer);
+
+    this.physics.add.collider(
+      this.jugador,
+      this.centolla,
+      this.recolectarCentolla,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      this.jugador,
+      this.lechuga,
+      this.recolectarLechuga,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      this.jugador,
+      this.salida,
+      this.verificarRecolectables,
+      null,
+      this
+    );
 
     this.physics.add.collider(
       this.hielos,
@@ -121,6 +189,39 @@ export default class Nivel3 extends Phaser.Scene {
       callbackScope: this,
       loop: true,
     });
+
+    this.add.image(366, 110, "reloj").setScrollFactor(0);
+    this.add.image(470, 110, "centolla").setScale(0.5).setScrollFactor(0);
+    this.add.image(250, 110, "lechuga").setScale(0.5).setScrollFactor(0);
+
+    //texto que muestra el temporizador
+    this.temporizadorTexto = this.add
+      .text(77, 80, this.temporizador, {
+        fontSize: "60px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
+
+    this.cantidadLechugaTexto = this.add
+      .text(300, 80, "0/5", {
+        fontSize: "50px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
+
+    this.cantidadCentollaTexto = this.add
+      .text(520, 80, "0/6", {
+        fontSize: "50px",
+        fill: "#000",
+        fontFamily: "cursive",
+        fontWeight: "bold",
+      })
+      .setScrollFactor(0);
+
 
     //botón para la escena de pausa
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
@@ -311,6 +412,42 @@ export default class Nivel3 extends Phaser.Scene {
     this.time.delayedCall(1000, () => {
       explosion.destroy();
     });
+  }
+
+  recolectarCentolla(jugador, centolla){
+  
+     centolla.disableBody(true, true);
+  
+      const explosion = this.add.sprite(centolla.x, centolla.y, "explosion");
+      explosion.play("explosion");
+  
+      this.recolectable.play();
+  
+      this.cantidadCentolla++;
+  
+      this.cantidadCentollaTexto.setText(this.cantidadCentolla + "/6");
+    
+  }
+
+  recolectarLechuga(jugador, lechuga){
+  
+    lechuga.disableBody(true, true);
+ 
+     const explosion = this.add.sprite(lechuga.x, lechuga.y, "explosion");
+     explosion.play("explosion");
+ 
+     this.recolectable.play();
+ 
+     this.cantidadLechuga++;
+ 
+     this.cantidadLechugaTexto.setText(this.cantidadLechuga + "/6");
+   
+ }
+  
+  verificarRecolectables() {
+    if (this.cantidadCentolla >= 1 && this.cantidadLechuga >= 1) {
+      this.juegoSuperado = true;
+    }
   }
 
   calcularPuntaje() {

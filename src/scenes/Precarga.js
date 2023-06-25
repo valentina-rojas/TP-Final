@@ -81,6 +81,7 @@ export default class Precarga extends Phaser.Scene {
     );
     this.load.image("hielos", "./public/assets/images/nivel3/hielos.png");
     this.load.image("centolla", "./public/assets/images/nivel3/centolla.png");
+    this.load.image("lechuga", "./public/assets/images/nivel3/lechuga.png");
 
 
     this.load.image("jugar", "./public/assets/images/jugar.png");
@@ -170,6 +171,7 @@ export default class Precarga extends Phaser.Scene {
     );
     this.load.image("humita", "./public/assets/images/humita.png");
     this.load.image("choripan", "./public/assets/images/choripan.png");
+    this.load.image("centollaPlato", "./public/assets/images/centollaPlato.png");
     this.load.image("plato", "./public/assets/images/plato.png");
     this.load.image("papel", "./public/assets/images/papel.png");
     this.load.image(
@@ -245,6 +247,15 @@ export default class Precarga extends Phaser.Scene {
       {
         frameWidth: 200,
         frameHeight: 200,
+      }
+    );
+
+    this.load.spritesheet(
+      "transicion",
+      "./public/assets/images/transicion.png",
+      {
+        frameWidth: 2666,
+        frameHeight: 2000,
       }
     );
   }
@@ -367,8 +378,18 @@ export default class Precarga extends Phaser.Scene {
       repeat: 0,
       hideOnComplete: true,
     });
+
+    this.anims.create({
+      key: "transicion",
+      frames: this.anims.generateFrameNumbers("transicion", {
+        start: 0,
+        end: 7,
+      }),
+      frameRate: 10,
+      repeat: 0,
+    });
     // init scene juego
-    this.scene.start("nivel2");
+    this.scene.start("nivel3");
   }
 
   update() {}

@@ -19,8 +19,11 @@ preloaad (){
     const botonJugar = this.add.sprite(1750, 600, "logoBoton").setInteractive();
     botonJugar.on("pointerup", () => {
       this.iniciarJuego.play();
+
       this.scene.start("nivel1");
-    });
+   
+  });
+    
     botonJugar.on("pointerover", () => {
       botonJugar.setTexture("logoBotonPresionado");
     })
@@ -43,4 +46,4 @@ preloaad (){
     });
    
   }
-  }
+  }  
