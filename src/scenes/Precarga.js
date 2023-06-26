@@ -139,6 +139,18 @@ export default class Precarga extends Phaser.Scene {
       "siguientePresionado",
       "./public/assets/images/cinematicas/siguientePresionado.png"
     );
+    this.load.image(
+      "transparente",
+      "./public/assets/images/cinematicas/transparente2.png"
+    );
+
+
+    this.load.image( "fin", "./public/assets/images/cinematicas/fin.png");
+    this.load.image( "fin1", "./public/assets/images/cinematicas/fin1.png");
+    this.load.image( "fin2", "./public/assets/images/cinematicas/fin2.png");
+    this.load.image( "home", "./public/assets/images/cinematicas/home.png");
+    this.load.image( "homePresionado", "./public/assets/images/cinematicas/homePresionado.png");
+ 
 
     //escena pausa
     this.load.image("juegoPausado", "./public/assets/images/juegoPausado.png");
@@ -258,6 +270,26 @@ export default class Precarga extends Phaser.Scene {
         frameHeight: 2000,
       }
     );
+
+    this.load.spritesheet(
+      "confeti",
+      "./public/assets/images/cinematicas/confeti.png",
+      {
+        frameWidth: 2666,
+        frameHeight: 2000,
+      }
+    );
+
+    this.load.spritesheet(
+      "cocina",
+      "./public/assets/images/cinematicas/cocina.png",
+      {
+        frameWidth: 2666,
+        frameHeight: 2000,
+      }
+    );
+
+   
   }
 
   create() {
@@ -388,8 +420,31 @@ export default class Precarga extends Phaser.Scene {
       frameRate: 10,
       repeat: 0,
     });
+
+
+    this.anims.create({
+      key: "confeti",
+      frames: this.anims.generateFrameNumbers("confeti", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "cocina",
+      frames: this.anims.generateFrameNumbers("cocina", {
+        start: 0,
+        end: 4,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    
     // init scene juego
-    this.scene.start("nivel3");
+    this.scene.start("final");
   }
 
   update() {}

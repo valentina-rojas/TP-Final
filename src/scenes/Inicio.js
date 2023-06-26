@@ -16,6 +16,11 @@ export default class Inicio extends Phaser.Scene {
     this.add.image(1333, 1000, "inicio1");
     this.click = this.sound.add("click");
 
+   
+    const cocina = this.add.sprite(1333, 1000, "cocina");
+    cocina.play("cocina");
+    this.add.image(1333, 1000, "transparente");
+
 
     this.imagenActual = 0; // Variable para rastrear la imagen actual
 
@@ -37,6 +42,8 @@ export default class Inicio extends Phaser.Scene {
     siguienteBoton.on("pointerout", () => {
       siguienteBoton.setTexture("siguiente");
     });
+
+ 
 
     // botón "Saltar"
     const saltarBoton = this.add
