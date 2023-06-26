@@ -289,6 +289,38 @@ export default class Precarga extends Phaser.Scene {
       }
     );
 
+
+
+
+
+// Crea la barra de carga
+const progressBox = this.add.graphics(); // crea un objeto graphics para representar el fondo de la barra de carga
+const progressWidth = 900; 
+const progressHeight = 70; 
+const progressBarX = (this.cameras.main.width - progressWidth) / 2; 
+const progressBarY = (this.cameras.main.height - progressHeight) / 2; 
+
+progressBox.fillStyle(0x222222, 0.8); // color de relleno y la opacidad del fondo 
+progressBox.fillRect(progressBarX, progressBarY, progressWidth, progressHeight); // Dibuja el fondo de la barra de carga en la pantalla
+
+const progressBar = this.add.graphics(); //objeto para representar la barra de progreso
+
+// actualiza la barra de carga en cada archivo cargado
+this.load.on('progress', function (value) { // Agrega un evento para escuchar el progreso de carga de los archivos
+  progressBar.clear(); // limpia el gráfico de la barra de progreso
+  progressBar.fillStyle(0xffffff, 1); // color de relleno y la opacidad de la barra de progreso
+  progressBar.fillRect(progressBarX + 10, progressBarY + 10, (progressWidth - 20) * value, progressHeight - 20); // Dibuja la barra de progreso actualizada en la pantalla
+});
+
+// elimina barra de carga una vez que todos los archivos se hayan cargado
+this.load.on('complete', function () { 
+  progressBar.destroy(); 
+  progressBox.destroy(); 
+});
+
+// inicia la carga de los recursos
+this.load.start(); // inicia la carga de los archivos
+
    
   }
 
