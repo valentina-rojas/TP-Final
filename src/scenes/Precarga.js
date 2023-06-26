@@ -92,7 +92,7 @@ export default class Precarga extends Phaser.Scene {
       "./public/assets/images/ajustesPresionado.png"
     );
     this.load.image("reanudar", "./public/assets/images/reanudar.png");
-    this.load.image("fondoPausa", "./public/assets/images/fondoPausa.png");
+    this.load.image("fondoPausa", "./public/assets/images/fondopausa.png");
     this.load.image(
       "instrucciones",
       "./public/assets/images/instrucciones.png"
