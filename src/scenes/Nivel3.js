@@ -63,7 +63,7 @@ export default class Nivel3 extends Phaser.Scene {
     const glaciares3Layer = map
       .createLayer("glaciers3", capaGlaciares3, 0, 0)
       .setOrigin(0, 1)
-      .setScrollFactor(1.5);
+      .setScrollFactor(0.9);
 
 
 
@@ -71,7 +71,7 @@ export default class Nivel3 extends Phaser.Scene {
     const Agua3Layer = map
       .createLayer("water3", capaAgua3, 0, 0)
       .setOrigin(0, 1)
-      .setScrollFactor(1.2);
+      .setScrollFactor(1);
 
     const capaPlataformas = map.addTilesetImage("plataformas", "plataformas3");
     const plataformaLayer = map.createLayer("platforms", capaPlataformas, 0, 0);
@@ -98,8 +98,6 @@ export default class Nivel3 extends Phaser.Scene {
 
 
     this.cursors = this.input.keyboard.createCursorKeys();
-
-
     
     this.centolla = this.physics.add.group();
 
@@ -118,7 +116,6 @@ export default class Nivel3 extends Phaser.Scene {
 
     this.lechuga = this.physics.add.group();
 
-    
     objectosLayer.objects.forEach((objData) => {
       const { x = 0, y = 0, name } = objData;
       switch (name) {
@@ -191,6 +188,14 @@ export default class Nivel3 extends Phaser.Scene {
       callbackScope: this,
       loop: true,
     });
+
+    this.time.addEvent({
+      delay: 1000,
+      callback: this.temporizadorDescendente,
+      callbackScope: this,
+      loop: true,
+    });
+
 
     this.add.image(366, 110, "reloj").setScrollFactor(0);
     this.add.image(470, 110, "centolla").setScale(0.5).setScrollFactor(0);
@@ -451,6 +456,18 @@ export default class Nivel3 extends Phaser.Scene {
   verificarRecolectables() {
     if (this.cantidadCentolla >= 1 && this.cantidadLechuga >= 1) {
       this.juegoSuperado = true;
+    }
+  }
+
+  temporizadorDescendente() {
+    this.temporizador = this.temporizador - 1;
+    this.temporizadorTexto.setText(this.temporizador);
+    //console.log(this.temporizador);
+
+    if (this.temporizador <= 0) {
+      //condicion perder si timer llega a 0
+  
+      this.juegoPerdido = true;
     }
   }
 

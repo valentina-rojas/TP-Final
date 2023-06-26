@@ -216,7 +216,7 @@ export default class Nivel1 extends Phaser.Scene {
       .on("pointerup", () => {
         this.musica.stop();
         this.click.play();
-        this.scene.pause("nivel2");
+        this.scene.pause("nivel1");
         this.scene.launch("pausa", { nivelActual: nivelActual });
       })
       .on("pointerover", () => {

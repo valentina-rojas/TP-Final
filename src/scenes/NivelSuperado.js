@@ -44,12 +44,10 @@ export default class NivelSuperado extends Phaser.Scene {
         if (this.nivelActual === "nivel1") {
           this.scene.start("nivel2");
         } else if (this.nivelActual === "nivel2") {
-  
           this.scene.start("nivel3");
-        }
-
-   
-      })
+        }else if (this.nivelActual === "nivel3") {
+          this.scene.start("final");
+      }})
       .on("pointerover", () => {
         botonSiguiente.setTexture("botonJugarPresionado");
       })
@@ -57,7 +55,7 @@ export default class NivelSuperado extends Phaser.Scene {
         botonSiguiente.setTexture("botonJugar");
       });
 
-      
+    
     //botón para reiniciar el nivel
     const botonReintentar = this.add
       .image(1600, 1400, "botonReintentar")
