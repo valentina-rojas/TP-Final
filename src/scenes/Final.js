@@ -16,7 +16,7 @@ export default class Final extends Phaser.Scene {
 
     this.click = this.sound.add("click");
 
-    this.imagenActual = 0; // Variable para rastrear la imagen actual
+    this.imagenActual = 0; // variable para rastrear la imagen actual
     this.imagenes = ["fin1", "fin2", "fin"];
 
     this.imagen = this.add
@@ -72,6 +72,10 @@ export default class Final extends Phaser.Scene {
       botonMenu.on("pointerout", () => {
         botonMenu.setTexture("home");
       });
+
+      // eliminar el botón "siguiente" al eliminar el cuarto elemento
+      // en la lista de elementos creados de la escena
+      this.children.remove(this.children.list[4]);
     }
   }
 }
