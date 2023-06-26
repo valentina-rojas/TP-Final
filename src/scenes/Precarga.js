@@ -83,7 +83,6 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("centolla", "./public/assets/images/nivel3/centolla.png");
     this.load.image("lechuga", "./public/assets/images/nivel3/lechuga.png");
 
-
     this.load.image("jugar", "./public/assets/images/jugar.png");
     this.load.image("ayuda", "./public/assets/images/ayuda.png");
     this.load.image("volver", "./public/assets/images/volver.png");
@@ -144,13 +143,14 @@ export default class Precarga extends Phaser.Scene {
       "./public/assets/images/cinematicas/transparente2.png"
     );
 
-
-    this.load.image( "fin", "./public/assets/images/cinematicas/fin.png");
-    this.load.image( "fin1", "./public/assets/images/cinematicas/fin1.png");
-    this.load.image( "fin2", "./public/assets/images/cinematicas/fin2.png");
-    this.load.image( "home", "./public/assets/images/cinematicas/home.png");
-    this.load.image( "homePresionado", "./public/assets/images/cinematicas/homePresionado.png");
- 
+    this.load.image("fin", "./public/assets/images/cinematicas/fin.png");
+    this.load.image("fin1", "./public/assets/images/cinematicas/fin1.png");
+    this.load.image("fin2", "./public/assets/images/cinematicas/fin2.png");
+    this.load.image("home", "./public/assets/images/cinematicas/home.png");
+    this.load.image(
+      "homePresionado",
+      "./public/assets/images/cinematicas/homePresionado.png"
+    );
 
     //escena pausa
     this.load.image("juegoPausado", "./public/assets/images/juegoPausado.png");
@@ -183,7 +183,10 @@ export default class Precarga extends Phaser.Scene {
     );
     this.load.image("humita", "./public/assets/images/humita.png");
     this.load.image("choripan", "./public/assets/images/choripan.png");
-    this.load.image("centollaPlato", "./public/assets/images/centollaPlato.png");
+    this.load.image(
+      "centollaPlato",
+      "./public/assets/images/centollaPlato.png"
+    );
     this.load.image("plato", "./public/assets/images/plato.png");
     this.load.image("papel", "./public/assets/images/papel.png");
     this.load.image(
@@ -217,7 +220,6 @@ export default class Precarga extends Phaser.Scene {
     this.load.audio("perdiste2", "./public/assets/audio/gameOver2.mp3");
     this.load.audio("click", "./public/assets/audio/mouseClick.mp3");
     this.load.audio("ganaste", "./public/assets/audio/win.mp3");
-
 
     //musica
     this.load.audio("musica1", "./public/assets/audio/Bleeping Demo.mp3");
@@ -289,39 +291,44 @@ export default class Precarga extends Phaser.Scene {
       }
     );
 
+    // Crea la barra de carga
+    const progressBox = this.add.graphics(); // crea un objeto graphics para representar el fondo de la barra de carga
+    const progressWidth = 900;
+    const progressHeight = 70;
+    const progressBarX = (this.cameras.main.width - progressWidth) / 2;
+    const progressBarY = (this.cameras.main.height - progressHeight) / 2;
 
+    progressBox.fillStyle(0x222222, 0.8); // color de relleno y la opacidad del fondo
+    progressBox.fillRect(
+      progressBarX,
+      progressBarY,
+      progressWidth,
+      progressHeight
+    ); // Dibuja el fondo de la barra de carga en la pantalla
 
+    const progressBar = this.add.graphics(); //objeto para representar la barra de progreso
 
+    // actualiza la barra de carga en cada archivo cargado
+    this.load.on("progress", function (value) {
+      // Agrega un evento para escuchar el progreso de carga de los archivos
+      progressBar.clear(); // limpia el gráfico de la barra de progreso
+      progressBar.fillStyle(0xffffff, 1); // color de relleno y la opacidad de la barra de progreso
+      progressBar.fillRect(
+        progressBarX + 10,
+        progressBarY + 10,
+        (progressWidth - 20) * value,
+        progressHeight - 20
+      ); // Dibuja la barra de progreso actualizada en la pantalla
+    });
 
-// Crea la barra de carga
-const progressBox = this.add.graphics(); // crea un objeto graphics para representar el fondo de la barra de carga
-const progressWidth = 900; 
-const progressHeight = 70; 
-const progressBarX = (this.cameras.main.width - progressWidth) / 2; 
-const progressBarY = (this.cameras.main.height - progressHeight) / 2; 
+    // elimina barra de carga una vez que todos los archivos se hayan cargado
+    this.load.on("complete", function () {
+      progressBar.destroy();
+      progressBox.destroy();
+    });
 
-progressBox.fillStyle(0x222222, 0.8); // color de relleno y la opacidad del fondo 
-progressBox.fillRect(progressBarX, progressBarY, progressWidth, progressHeight); // Dibuja el fondo de la barra de carga en la pantalla
-
-const progressBar = this.add.graphics(); //objeto para representar la barra de progreso
-
-// actualiza la barra de carga en cada archivo cargado
-this.load.on('progress', function (value) { // Agrega un evento para escuchar el progreso de carga de los archivos
-  progressBar.clear(); // limpia el gráfico de la barra de progreso
-  progressBar.fillStyle(0xffffff, 1); // color de relleno y la opacidad de la barra de progreso
-  progressBar.fillRect(progressBarX + 10, progressBarY + 10, (progressWidth - 20) * value, progressHeight - 20); // Dibuja la barra de progreso actualizada en la pantalla
-});
-
-// elimina barra de carga una vez que todos los archivos se hayan cargado
-this.load.on('complete', function () { 
-  progressBar.destroy(); 
-  progressBox.destroy(); 
-});
-
-// inicia la carga de los recursos
-this.load.start(); // inicia la carga de los archivos
-
-   
+    // inicia la carga de los recursos
+    this.load.start(); // inicia la carga de los archivos
   }
 
   create() {
@@ -453,7 +460,6 @@ this.load.start(); // inicia la carga de los archivos
       repeat: 0,
     });
 
-
     this.anims.create({
       key: "confeti",
       frames: this.anims.generateFrameNumbers("confeti", {
@@ -474,7 +480,6 @@ this.load.start(); // inicia la carga de los archivos
       repeat: -1,
     });
 
-    
     // init scene juego
     this.scene.start("inicio");
   }
