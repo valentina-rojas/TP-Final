@@ -5,7 +5,9 @@ export default class Ayuda extends Phaser.Scene {
     super("ayuda");
   }
 
-  init() {}
+  init() {
+
+  }
 
   preload() {}
 
@@ -19,8 +21,8 @@ export default class Ayuda extends Phaser.Scene {
 
     volverBoton.on("pointerup", () => {
       this.click.play();
-      
-      this.scene.start("menu");
+      this.scene.stop("ayuda");
+      this.scene.resume("menu");
     });
 
     volverBoton.on("pointerover", () => {

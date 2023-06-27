@@ -16,11 +16,12 @@ export default class Inicio extends Phaser.Scene {
     this.add.image(1333, 1000, "inicio1");
     this.click = this.sound.add("click");
 
-   
+    this.musica = this.sound.add("musica5");
+    this.musica.play({ loop: true });
+
     const cocina = this.add.sprite(1333, 1000, "cocina");
     cocina.play("cocina");
     this.add.image(1333, 1000, "transparente");
-
 
     this.imagenActual = 0; // Variable para rastrear la imagen actual
 
@@ -35,7 +36,10 @@ export default class Inicio extends Phaser.Scene {
       .image(2450, 1750, "siguiente", { fontSize: 100, fill: "#ffffff" })
       .setInteractive();
 
-    siguienteBoton.on("pointerup", () => {this.mostrarSiguienteImagen(); this.click.play()});
+    siguienteBoton.on("pointerup", () => {
+      this.mostrarSiguienteImagen();
+      this.click.play();
+    });
     siguienteBoton.on("pointerover", () => {
       siguienteBoton.setTexture("siguientePresionado");
     });
@@ -43,13 +47,14 @@ export default class Inicio extends Phaser.Scene {
       siguienteBoton.setTexture("siguiente");
     });
 
- 
-
     // botón "Saltar"
     const saltarBoton = this.add
-      .image(2500, 1900,  "saltar", { fontSize: 100, fill: "#ffffff" })
+      .image(2500, 1900, "saltar", { fontSize: 100, fill: "#ffffff" })
       .setInteractive();
-    saltarBoton.on("pointerup", () => {this.scene.start("menu"); this.click.play()});
+    saltarBoton.on("pointerup", () => {
+      this.scene.start("menu", { musica: this.musica });
+      this.click.play();
+    });
     saltarBoton.on("pointerover", () => {
       saltarBoton.setTexture("saltarPresionado");
     });
@@ -63,7 +68,9 @@ export default class Inicio extends Phaser.Scene {
 
     if (this.imagenActual >= this.imagenes.length) {
       //si llego a la última imágen cambiar a la escena menú
-      this.scene.start("menu");
+
+      this.musica.pause();
+      this.scene.start("menu", { musica: this.musica });
     } else {
       this.imagen.setTexture(this.imagenes[this.imagenActual]); //sino pasar a la siguiente imágen
     }

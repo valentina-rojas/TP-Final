@@ -15,6 +15,9 @@ export default class Final extends Phaser.Scene {
     this.add.image(1333, 1000, "fin");
 
     this.click = this.sound.add("click");
+    this.musica = this.sound.add("musica7");
+
+    this.musica.play();
 
     this.imagenActual = 0; // variable para rastrear la imagen actual
     this.imagenes = ["fin1", "fin2", "fin"];
@@ -64,6 +67,7 @@ export default class Final extends Phaser.Scene {
       const botonMenu = this.add.sprite(2600, 1900, "home").setInteractive();
       botonMenu.on("pointerup", () => {
         this.click.play();
+        this.musica.stop();
         this.scene.start("menu");
       });
       botonMenu.on("pointerover", () => {
