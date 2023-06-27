@@ -54,7 +54,9 @@ export default class NivelPerdido extends Phaser.Scene {
       botonVolver
         .on("pointerup", () => {
           this.click.play();
-          
+
+          this.scene.stop("nivelPerdido");
+          this.scene.stop(this.nivelActual);
           this.scene.start("menu");
         })
         .on("pointerover", () => {

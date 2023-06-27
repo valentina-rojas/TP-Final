@@ -42,10 +42,18 @@ export default class NivelSuperado extends Phaser.Scene {
        
 
         if (this.nivelActual === "nivel1") {
+
+          this.scene.stop("nivel1");
+          this.scene.stop("nivelSuperado");
           this.scene.start("nivel2");
         } else if (this.nivelActual === "nivel2") {
+          this.scene.stop("nivel2");
+          this.scene.stop("nivelSuperado");
+
           this.scene.start("nivel3");
         }else if (this.nivelActual === "nivel3") {
+          this.scene.stop("nivel3");
+          this.scene.stop("nivelSuperado");
           this.scene.start("final");
       }})
       .on("pointerover", () => {
@@ -64,6 +72,8 @@ export default class NivelSuperado extends Phaser.Scene {
     botonReintentar
       .on("pointerup", () => {
         if (this.nivelActual === "nivel1") {
+
+
           this.scene.start("nivel1");
         } else if (this.nivelActual === "nivel2") {
           this.scene.start("nivel2");
@@ -84,6 +94,7 @@ export default class NivelSuperado extends Phaser.Scene {
 
     botonVolver
       .on("pointerup", () => {
+        this.scene.stop(this.nivelActual);
         this.scene.start("menu");
       })
       .on("pointerover", () => {

@@ -9,7 +9,7 @@ preloaad (){
 }
   create() {
     this.add.image(1333, 1000, "fondoMenu");
-    this.add.image(1950, 1050, "logo");
+    this.add.image(2050, 1150, "logo");
     this.iniciarJuego = this.sound.add("iniciarJuego");
     this.click = this.sound.add("click");
    

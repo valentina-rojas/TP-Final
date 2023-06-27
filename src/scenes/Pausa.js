@@ -37,7 +37,7 @@ export default class Pausa extends Phaser.Scene {
       .on("pointerout", () => {
         botonReanudar.setTexture("botonJugar");
       });
-
+      
     //botón para reiniciar el nivel
     const botonReintentar = this.add
       .image(1600, 1100, "botonReintentar")

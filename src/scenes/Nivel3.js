@@ -298,8 +298,8 @@ export default class Nivel3 extends Phaser.Scene {
       //llama a funcion para calcular el puntaje
       this.calcularPuntaje();
 
-      //inicio de escena
-      this.scene.start("nivelSuperado", {
+      this.scene.pause("nivel3");
+      this.scene.launch("nivelSuperado", {
         puntajeFinal: this.puntajeFinal,
         nivelActual: "nivel3", //traspaso de data
       });
@@ -309,7 +309,9 @@ export default class Nivel3 extends Phaser.Scene {
     if (this.juegoPerdido) {
       this.musica.stop();
       this.perdiste1.play();
-      this.scene.start("nivelPerdido", {
+
+      this.scene.pause("nivel3");
+      this.scene.launch("nivelPerdido", {
         nivelActual: "nivel3", //traspaso de data
       });
     }
