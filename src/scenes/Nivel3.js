@@ -66,7 +66,6 @@ export default class Nivel3 extends Phaser.Scene {
       .setScrollFactor(0.9);
 
 
-
     const capaAgua3 = map.addTilesetImage("aguaFrente", "aguaFrente");
     const Agua3Layer = map
       .createLayer("water3", capaAgua3, 0, 0)
@@ -234,10 +233,10 @@ export default class Nivel3 extends Phaser.Scene {
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     pausaBoton
       .on("pointerup", () => {
-        this.musica.stop();
+       this.musica.pause();
         this.click.play();
         this.scene.pause("nivel3");
-        this.scene.launch("pausa", { nivelActual: nivelActual });
+        this.scene.launch("pausa", { nivelActual: nivelActual,  musica: this.musica });
       })
       .on("pointerover", () => {
         pausaBoton.setTexture("ajustesPresionado");

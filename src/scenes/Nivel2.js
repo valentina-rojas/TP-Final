@@ -233,10 +233,10 @@ export default class Nivel2 extends Phaser.Scene {
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     pausaBoton
       .on("pointerup", () => {
-        this.musica.stop();
+        this.musica.pause();
         this.click.play();
         this.scene.pause("nivel2");
-        this.scene.launch("pausa", { nivelActual: nivelActual });
+        this.scene.launch("pausa", { nivelActual: nivelActual, musica: this.musica  });
       })
       .on("pointerover", () => {
         pausaBoton.setTexture("ajustesPresionado");

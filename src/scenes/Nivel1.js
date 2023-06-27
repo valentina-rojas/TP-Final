@@ -214,10 +214,10 @@ export default class Nivel1 extends Phaser.Scene {
     const pausaBoton = this.add.sprite(2500, 110, "ajustes").setInteractive();
     pausaBoton
       .on("pointerup", () => {
-        this.musica.stop();
+        this.musica.pause();
         this.click.play();
         this.scene.pause("nivel1");
-        this.scene.launch("pausa", { nivelActual: nivelActual });
+        this.scene.launch("pausa", { nivelActual: nivelActual, musica: this.musica });
       })
       .on("pointerover", () => {
         pausaBoton.setTexture("ajustesPresionado");
@@ -294,6 +294,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     //inicia escena de juego perdido
     if (this.juegoPerdido) {
+
       this.musica.stop();
       this.perdiste1.play();
 

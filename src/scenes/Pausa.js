@@ -8,6 +8,7 @@ export default class Pausa extends Phaser.Scene {
 
   init(data) {
     this.nivelActual = data.nivelActual;
+    this.musica = data.musica;
   }
 
   preload() {}
@@ -27,9 +28,12 @@ export default class Pausa extends Phaser.Scene {
     botonReanudar
       .on("pointerup", () => {
         this.click.play();
-        
         this.scene.stop("pausa");
+     
         this.scene.resume(this.nivelActual);
+
+        const nivelScene = this.scene.get(this.nivelActual);
+        nivelScene.musica.resume();
       })
       .on("pointerover", () => {
         botonReanudar.setTexture("botonJugarPresionado");

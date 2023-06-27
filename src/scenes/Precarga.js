@@ -481,7 +481,7 @@ export default class Precarga extends Phaser.Scene {
     });
 
     // init scene juego
-    this.scene.start("nivel3");
+    this.scene.start("nivel1");
   }
 
   update() {}
