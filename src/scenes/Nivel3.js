@@ -212,7 +212,7 @@ export default class Nivel3 extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.cantidadLechugaTexto = this.add
-      .text(300, 80, "0/5", {
+      .text(300, 80, "0/3", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",
@@ -221,7 +221,7 @@ export default class Nivel3 extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.cantidadCentollaTexto = this.add
-      .text(520, 80, "0/6", {
+      .text(520, 80, "0/5", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",
@@ -282,8 +282,8 @@ export default class Nivel3 extends Phaser.Scene {
     this.daño = this.sound.add("daño");
     this.ganaste = this.sound.add("ganaste");
     this.perdiste1 = this.sound.add("perdiste1");
-    this.perdiste2 = this.sound.add("perdiste2");
     this.musica = this.sound.add("musica1")
+
 
     this.musica.play();
   }
@@ -414,6 +414,8 @@ export default class Nivel3 extends Phaser.Scene {
   }
 
   colisionHielos(hielos) {
+
+    this.daño.play();
     hielos.disableBody(true, true);
 
     const explosion = this.add.sprite(hielos.x, hielos.y, "explosion2");
@@ -436,7 +438,7 @@ export default class Nivel3 extends Phaser.Scene {
   
       this.cantidadCentolla++;
   
-      this.cantidadCentollaTexto.setText(this.cantidadCentolla + "/6");
+      this.cantidadCentollaTexto.setText(this.cantidadCentolla + "/5");
     
   }
 
@@ -451,12 +453,12 @@ export default class Nivel3 extends Phaser.Scene {
  
      this.cantidadLechuga++;
  
-     this.cantidadLechugaTexto.setText(this.cantidadLechuga + "/6");
+     this.cantidadLechugaTexto.setText(this.cantidadLechuga + "/3");
    
  }
   
   verificarRecolectables() {
-    if (this.cantidadCentolla >= 1 && this.cantidadLechuga >= 1) {
+    if (this.cantidadCentolla >= 5 && this.cantidadLechuga >= 3) {
       this.juegoSuperado = true;
     }
   }

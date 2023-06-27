@@ -193,7 +193,7 @@ export default class Nivel1 extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.cantidadPanTexto = this.add
-      .text(300, 80, "0/5", {
+      .text(300, 80, "0/3", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",
@@ -202,7 +202,7 @@ export default class Nivel1 extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.cantidadCarneTexto = this.add
-      .text(520, 80, "0/6", {
+      .text(520, 80, "0/3", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",
@@ -345,7 +345,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cantidadPan++;
 
-    this.cantidadPanTexto.setText(this.cantidadPan + "/5");
+    this.cantidadPanTexto.setText(this.cantidadPan + "/3");
   }
 
   recolectarCarne(jugador, carne) {
@@ -358,7 +358,7 @@ export default class Nivel1 extends Phaser.Scene {
 
     this.cantidadCarne++;
 
-    this.cantidadCarneTexto.setText(this.cantidadCarne + "/6");
+    this.cantidadCarneTexto.setText(this.cantidadCarne + "/3");
   }
 
   temporizadorDescendente() {
@@ -374,7 +374,7 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   verificarRecolectables() {
-    if (this.cantidadPan >= 1 && this.cantidadCarne >= 1) {
+    if (this.cantidadPan >= 3 && this.cantidadCarne >= 3) {
       this.juegoSuperado = true;
     }
   }

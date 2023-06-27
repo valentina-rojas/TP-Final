@@ -215,14 +215,14 @@ export default class Nivel2 extends Phaser.Scene {
       fontWeight: "bold",
     });
 
-    this.cantidadHarinaTexto = this.add.text(300, 80, "0/5", {
+    this.cantidadHarinaTexto = this.add.text(300, 80, "/3", {
       fontSize: "50px",
       fill: "#000",
       fontFamily: "cursive",
       fontWeight: "bold",
     });
 
-    this.cantidadMaizTexto = this.add.text(520, 80, "0/6", {
+    this.cantidadMaizTexto = this.add.text(520, 80, "/7", {
       fontSize: "50px",
       fill: "#000",
       fontFamily: "cursive",
@@ -380,7 +380,7 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cantidadHarina++;
 
-    this.cantidadHarinaTexto.setText(this.cantidadHarina + "/5");
+    this.cantidadHarinaTexto.setText(this.cantidadHarina + "/3");
   }
 
   recolectarMaiz(jugador, maiz) {
@@ -393,7 +393,7 @@ export default class Nivel2 extends Phaser.Scene {
 
     this.cantidadMaiz++;
 
-    this.cantidadMaizTexto.setText(this.cantidadMaiz + "/6");
+    this.cantidadMaizTexto.setText(this.cantidadMaiz + "/7");
   }
 
   temporizadorDescendente() {
@@ -409,7 +409,7 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   verificarRecolectables() {
-    if (this.cantidadMaiz >= 1 && this.cantidadHarina >= 1) {
+    if (this.cantidadMaiz >= 7 && this.cantidadHarina >= 3) {
       this.juegoSuperado = true;
     }
   }
