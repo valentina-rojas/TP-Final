@@ -1,7 +1,7 @@
 # Go Chef!
 
 
-![GoChef]([/public/assets/images/GoChef.png](https://raw.githubusercontent.com/valentina-rojas/TP-Final/main/public/assets/images/GoChef.png)
+![GoChef](https://raw.githubusercontent.com/valentina-rojas/TP-Final/main/public/assets/images/GoChef.png)
 
 
 
