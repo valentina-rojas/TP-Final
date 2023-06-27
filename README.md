@@ -1,6 +1,9 @@
 # Go Chef!
 
-![GoChef](/public/assets/images/GoChef.png)
+
+![GoChef]([/public/assets/images/GoChef.png](https://raw.githubusercontent.com/valentina-rojas/TP-Final/main/public/assets/images/GoChef.png)
+
+
 
 Hola! Soy estudiante de la Licenciatura en Producción de Videojeugos y Entretenimiento Digital y este es mi proyecto final para la materia Programación 1.
 
