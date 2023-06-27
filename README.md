@@ -1,4 +1,6 @@
-# Go Chef
+# Go Chef!
+
+![GoChef](/public/assets/images/GoChef.png)
 
 Hola! Soy estudiante de la Licenciatura en Producción de Videojeugos y Entretenimiento Digital y este es mi proyecto final para la materia Programación 1.
 
