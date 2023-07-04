@@ -196,22 +196,25 @@ export default class Nivel3 extends Phaser.Scene {
     });
 
 
-    this.add.image(366, 110, "reloj").setScrollFactor(0);
-    this.add.image(470, 110, "centolla").setScale(0.5).setScrollFactor(0);
-    this.add.image(250, 110, "lechuga").setScale(0.5).setScrollFactor(0);
+   
+
+    this.add.image(366, 105, "reloj").setScrollFactor(0);
+    this.add.image(490, 100, "centolla").setScale(0.65).setScrollFactor(0);
+    this.add.image(275, 100, "lechuga").setScale(0.65).setScrollFactor(0);
+
 
     //texto que muestra el temporizador
     this.temporizadorTexto = this.add
-      .text(77, 80, this.temporizador, {
-        fontSize: "60px",
-        fill: "#000",
-        fontFamily: "cursive",
-        fontWeight: "bold",
-      })
-      .setScrollFactor(0);
+    .text(105, 70, this.temporizador, {
+      fontSize: "75px",
+      fill: "#000",
+      fontFamily: "cursive",
+     fontWeight: "bold",
+    })
+    .setScrollFactor(0);
 
     this.cantidadLechugaTexto = this.add
-      .text(300, 80, "0/3", {
+      .text(320, 90, "0/3", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",
@@ -220,7 +223,7 @@ export default class Nivel3 extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.cantidadCentollaTexto = this.add
-      .text(520, 80, "0/5", {
+      .text(540, 90, "0/5", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",

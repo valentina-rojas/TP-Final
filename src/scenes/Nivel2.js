@@ -203,26 +203,26 @@ export default class Nivel2 extends Phaser.Scene {
       loop: true,
     });
 
-    this.add.image(366, 110, "reloj").setScrollFactor(0);
-    this.add.image(470, 110, "maizIcono").setScale(0.7).setScrollFactor(0);
-    this.add.image(250, 110, "harinaIcono").setScale(0.7).setScrollFactor(0);
+    this.add.image(366, 105, "reloj").setScrollFactor(0);
+    this.add.image(490, 100, "maiz").setScale(0.7).setScrollFactor(0);
+    this.add.image(275, 100, "harina").setScale(0.7).setScrollFactor(0);
 
     //texto que muestra el temporizador
-    this.temporizadorTexto = this.add.text(77, 80, this.temporizador, {
-      fontSize: "60px",
+    this.temporizadorTexto = this.add.text(105, 70, this.temporizador, {
+      fontSize: "75px",
       fill: "#000",
       fontFamily: "cursive",
       fontWeight: "bold",
     });
 
-    this.cantidadHarinaTexto = this.add.text(300, 80, "/3", {
+    this.cantidadHarinaTexto = this.add.text(320, 90, "0/3", {
       fontSize: "50px",
       fill: "#000",
       fontFamily: "cursive",
       fontWeight: "bold",
     });
 
-    this.cantidadMaizTexto = this.add.text(520, 80, "/7", {
+    this.cantidadMaizTexto = this.add.text(540, 90, "0/7", {
       fontSize: "50px",
       fill: "#000",
       fontFamily: "cursive",
@@ -236,7 +236,10 @@ export default class Nivel2 extends Phaser.Scene {
         this.musica.pause();
         this.click.play();
         this.scene.pause("nivel2");
-        this.scene.launch("pausa", { nivelActual: nivelActual, musica: this.musica  });
+        this.scene.launch("pausa", {
+          nivelActual: nivelActual,
+          musica: this.musica,
+        });
       })
       .on("pointerover", () => {
         pausaBoton.setTexture("ajustesPresionado");
@@ -302,10 +305,9 @@ export default class Nivel2 extends Phaser.Scene {
     this.ganaste = this.sound.add("ganaste");
     this.perdiste1 = this.sound.add("perdiste1");
     this.perdiste2 = this.sound.add("perdiste2");
-    this.musica = this.sound.add("musica4")
+    this.musica = this.sound.add("musica4");
 
     this.musica.play();
-
   }
 
   update() {
@@ -317,7 +319,7 @@ export default class Nivel2 extends Phaser.Scene {
       this.ganaste.play();
       //llama a funcion para calcular el puntaje
       this.calcularPuntaje();
-     
+
       //inicio de escena
       this.scene.pause("nivel2");
       this.scene.launch("nivelSuperado", {
@@ -403,7 +405,7 @@ export default class Nivel2 extends Phaser.Scene {
 
     if (this.temporizador <= 0) {
       //condicion perder si timer llega a 0
-  
+
       this.juegoPerdido = true;
     }
   }
@@ -415,7 +417,6 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   perderVida(jugador) {
-
     this.daño.play({ volume: 0.3 });
     // restar una vida al jugador
     this.vidas--;

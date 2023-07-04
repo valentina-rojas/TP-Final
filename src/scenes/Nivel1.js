@@ -164,8 +164,8 @@ export default class Nivel1 extends Phaser.Scene {
 
     //overlap entre jugador y salida
     this.physics.add.overlap(
-      this.jugador,
       this.salida,
+      this.jugador,
       this.verificarRecolectables,
       null,
       this
@@ -178,22 +178,22 @@ export default class Nivel1 extends Phaser.Scene {
       loop: true,
     });
 
-    this.add.image(366, 110, "reloj").setScrollFactor(0);
-    this.add.image(470, 110, "carne").setScale(0.5).setScrollFactor(0);
-    this.add.image(250, 110, "pan").setScale(0.5).setScrollFactor(0);
+    this.add.image(366, 105, "reloj").setScrollFactor(0);
+    this.add.image(490, 100, "carne").setScale(0.7).setScrollFactor(0);
+    this.add.image(275, 100, "pan").setScale(0.7).setScrollFactor(0);
 
     //texto que muestra el temporizador
     this.temporizadorTexto = this.add
-      .text(77, 80, this.temporizador, {
-        fontSize: "60px",
+      .text(105, 70, this.temporizador, {
+        fontSize: "75px",
         fill: "#000",
         fontFamily: "cursive",
-        fontWeight: "bold",
+       fontWeight: "bold",
       })
       .setScrollFactor(0);
 
     this.cantidadPanTexto = this.add
-      .text(300, 80, "0/3", {
+      .text(320, 90, "0/3", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",
@@ -202,7 +202,7 @@ export default class Nivel1 extends Phaser.Scene {
       .setScrollFactor(0);
 
     this.cantidadCarneTexto = this.add
-      .text(520, 80, "0/3", {
+      .text(540, 90, "0/3", {
         fontSize: "50px",
         fill: "#000",
         fontFamily: "cursive",

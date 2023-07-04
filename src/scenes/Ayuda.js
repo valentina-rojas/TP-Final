@@ -17,7 +17,7 @@ export default class Ayuda extends Phaser.Scene {
     this.click = this.sound.add("click");
    
     //botón para volver al menu
-    const volverBoton = this.add.image(1815, 1350, "flecha").setInteractive();
+    const volverBoton = this.add.image(1800, 1335, "flecha").setInteractive();
 
     volverBoton.on("pointerup", () => {
       this.click.play();

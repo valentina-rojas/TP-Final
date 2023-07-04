@@ -240,6 +240,12 @@ export default class Precarga extends Phaser.Scene {
     );
     this.load.audio("musica8", "./public/assets/audio/Townie Loop.mp3");
 
+
+  
+
+
+    
+
     this.load.spritesheet("enemigo", "./public/assets/images/enemigo.png", {
       frameWidth: 200,
       frameHeight: 150,
