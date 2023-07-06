@@ -13,4 +13,7 @@ Go Chef es un videojuego de plataformas en el que un Chef debe dominar las artes
 Te invito a jugarlo a través del siguiente link: https://valentina-rojas.github.io/TP-Final/
 
 
+Link a GDD: https://drive.google.com/file/d/1DTpeo4OVd7YxC75QnL_2_76Z17LMR3Zg/view?usp=drive_link
+Link a TDD: https://drive.google.com/file/d/1QfJQn9EvRwZwyXVYWbAt8JWY0X0kE_Dp/view?usp=drive_link
+
 
